@@ -35,6 +35,28 @@ Other commands:
 - Imports and Tailwind classes are sorted automatically — don't hand-sort them.
 - Whitespace in `.astro` files follows Astro v7's `compressHTML: "jsx"` rules: whitespace between inline elements across lines is dropped, so use `{" "}` for an intentional space.
 
+## Components
+
+Componentize: pages only compose sections, and sections are built from small components that take props.
+
+```
+src/components/
+  layout/      site chrome and page wrappers (Header, LanguagePicker, ThemeToggle, Section)
+  ui/          design-system primitives (Button, Highlight, Cursor, StatusDot)
+  actions/     meaningful actions that wrap ui/Button and resolve their own target (ContactButton, CvButton, ProjectsLink)
+  sections/
+    hero/      one folder per page section: Hero.astro is the entry, HeroTitle/HeroCard/... are its parts
+src/data/      facts that don't change per language (name, stack, CV paths)
+src/i18n/      translatable copy (ui.ts) and helpers
+```
+
+- Pages stay thin: `pages/[locale]/index.astro` renders `<Hero />` (and later `<Experience />`, ...), never large blocks of markup.
+- A new section goes in `sections/<name>/` with `<Name>.astro` as its entry and `<Name><Part>.astro` for its pieces. Wrap it in `layout/Section.astro` to get the shared width, padding and line-number gutter.
+- `ui/` components know nothing about locale or site data: everything comes in through props and slots. They accept a `class` prop (and `...rest` where it makes sense) so callers can adjust layout.
+- `actions/` and `sections/` may read `Astro.currentLocale` and `t()`; copy goes in `src/i18n/ui.ts` (both locales), never hardcoded.
+- Use `.astro` by default; a `.tsx` Solid component only when it needs client-side interactivity (see below).
+- Style with the Sedimento tokens in `src/styles/global.css` (`bg-moss`, `text-ink-muted`, `text-display`, ...), not raw colors or sizes.
+
 ## Interactivity
 
 - Prefer SolidJS components (islands with a `client:*` directive) when a component needs JS interactivity, instead of `<script>` tags in `.astro` files.
