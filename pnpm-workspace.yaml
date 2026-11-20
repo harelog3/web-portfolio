@@ -1,2 +1,5 @@
+allowBuilds:
+    esbuild: true
+    workerd: true
 minimumReleaseAgeExclude:
     - solid-js@1.9.20
