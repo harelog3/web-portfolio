@@ -124,6 +124,11 @@
 }
 
 @layer base {
+    /* Keeps anchor targets (#experience) from landing under the sticky header. */
+    html {
+        scroll-padding-top: --spacing(15);
+    }
+
     body {
         @apply bg-bg text-body text-ink;
     }

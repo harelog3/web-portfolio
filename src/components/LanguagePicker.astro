@@ -4,24 +4,40 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { languages } from "../i18n/ui";
 import { getLocale, locales, useTranslations } from "../i18n/utils";
 
+interface Props {
+    /** "lg" gives 44px touch targets for the mobile sheet. */
+    size?: "sm" | "lg";
+}
+
+const { size = "sm" } = Astro.props;
 const current = getLocale(Astro.currentLocale);
 const t = useTranslations(current);
 const pathWithoutLocale = Astro.url.pathname.replace(/^\/[^/]+\/?/, "");
 ---
 
 <nav aria-label={t("nav.language")}>
-    <ul class="flex gap-3">
-        {locales.map((lang) => (
-            <li>
+    <ul class="flex items-center">
+        {locales.map((lang, i) => (
+            <li class="flex items-center">
+                {i > 0 && (
+                    <span aria-hidden="true" class="px-1 text-ink-faint">
+                        ·
+                    </span>
+                )}
+                {/* The visible code ("es") starts the accessible name ("Español"), which keeps label-in-name (WCAG 2.5.3). */}
                 <a
                     href={getRelativeLocaleUrl(lang, pathWithoutLocale)}
                     lang={lang}
                     hreflang={lang}
+                    aria-label={languages[lang]}
                     aria-current={lang === current ? "page" : undefined}
                     data-locale={lang}
-                    class="inline-flex min-h-6 min-w-6 items-center underline-offset-4 hover:underline aria-[current=page]:font-bold"
+                    class:list={[
+                        "inline-flex items-center justify-center text-ink-muted no-underline transition-colors hover:text-ink aria-[current=page]:font-semibold aria-[current=page]:text-ink",
+                        size === "lg" ? "size-11 text-body" : "min-h-6 min-w-6 text-body-sm",
+                    ]}
                 >
-                    {languages[lang]}
+                    {lang}
                 </a>
             </li>
         ))}
