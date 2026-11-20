@@ -35,6 +35,11 @@ Other commands:
 - Imports and Tailwind classes are sorted automatically — don't hand-sort them.
 - Whitespace in `.astro` files follows Astro v7's `compressHTML: "jsx"` rules: whitespace between inline elements across lines is dropped, so use `{" "}` for an intentional space.
 
+## Code comments
+
+- Write code comments in English.
+- Add them where they explain _why_ (non-obvious decisions, constraints, trade-offs), not to restate _what_ the code does.
+
 ## Commits
 
 Always use [Conventional Commits](https://www.conventionalcommits.org/), for every commit, no exceptions:
