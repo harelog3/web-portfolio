@@ -1,0 +1,35 @@
+---
+import { profile } from "../../../data/profile";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Section from "../../layout/Section.astro";
+import HeroActions from "./HeroActions.astro";
+import HeroCard from "./HeroCard.astro";
+import HeroTitle from "./HeroTitle.astro";
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+
+const cardRows = [
+    { term: t("hero.card.name"), value: profile.name },
+    { term: t("hero.card.base"), value: t("hero.card.baseValue") },
+    { term: t("hero.card.stack"), value: profile.stack },
+    { term: t("hero.card.now"), value: t("hero.card.nowValue") },
+    { term: t("hero.card.status"), value: t("hero.card.statusValue"), status: true },
+];
+---
+
+<Section lines={3} class="pt-16 lg:pt-24">
+    <div class="grid items-end gap-16 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+        <div>
+            <p class="mb-7 text-label text-ink-muted">
+                <span aria-hidden="true" class="text-oxide">
+                    §{" "}
+                </span>
+                {t("hero.eyebrow")}
+            </p>
+            <HeroTitle greeting={t("hero.greeting")} name={profile.name} />
+            <p class="mt-8 max-w-[56ch] text-ink-muted">{t("hero.lede")}</p>
+            <HeroActions class="mt-10" />
+        </div>
+        <HeroCard title={t("hero.card.title")} number="nº 001" rows={cardRows} />
+    </div>
+</Section>

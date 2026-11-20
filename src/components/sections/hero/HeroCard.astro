@@ -1,0 +1,57 @@
+---
+import StatusDot from "../../ui/StatusDot.astro";
+
+interface Row {
+    term: string;
+    value: string;
+    /** Prefixes the value with the "available" dot. */
+    status?: boolean;
+}
+
+interface Props {
+    title: string;
+    /** Decorative catalogue number, like a field-notebook sample tag. */
+    number: string;
+    rows: Row[];
+    class?: string;
+}
+
+const { title, number, rows, class: className } = Astro.props;
+const titleId = "hero-card-title";
+
+// Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif.
+const bands = [
+    "h-7 bg-[repeating-linear-gradient(45deg,var(--color-moss)_0_2px,transparent_2px_6px)]",
+    "h-4 bg-[repeating-linear-gradient(-45deg,var(--color-ochre)_0_2px,transparent_2px_6px)]",
+    "h-2.5 bg-oxide",
+    "h-5.5 bg-[repeating-linear-gradient(0deg,var(--color-clay)_0_2px,transparent_2px_5px)]",
+];
+---
+
+<aside aria-labelledby={titleId} class:list={["border border-ink bg-bg-raised", className]}>
+    <div class="flex justify-between border-b border-ink px-4 py-2.5 text-micro tracking-[.06em]">
+        <h2 id={titleId}>{title}</h2>
+        <span aria-hidden="true" class="text-oxide">
+            {number}
+        </span>
+    </div>
+    <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 px-4 pt-2 pb-3.5 text-[0.8125rem] leading-normal">
+        {rows.map((row, i) => {
+            const divider = i < rows.length - 1 ? "border-b border-dashed border-rule" : "";
+            return (
+                <>
+                    <dt class:list={["py-1.75 text-ink-faint", divider]}>{row.term}</dt>
+                    <dd class:list={["flex items-center gap-2 py-1.75", divider]}>
+                        {row.status && <StatusDot />}
+                        {row.value}
+                    </dd>
+                </>
+            );
+        })}
+    </dl>
+    <div aria-hidden="true" class="border-t border-ink">
+        {bands.map((band, i) => (
+            <div class:list={[band, i > 0 && "border-t border-ink"]} />
+        ))}
+    </div>
+</aside>

@@ -1,0 +1,15 @@
+---
+import Cursor from "../../ui/Cursor.astro";
+import Highlight from "../../ui/Highlight.astro";
+
+interface Props {
+    greeting: string;
+    name: string;
+}
+
+const { greeting, name } = Astro.props;
+---
+
+<h1 class="text-display lg:text-display-xl">
+    {greeting} <Highlight>{name}</Highlight>.<Cursor />
+</h1>

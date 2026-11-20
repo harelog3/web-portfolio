@@ -1,0 +1,15 @@
+---
+import ContactButton from "../../actions/ContactButton.astro";
+import CvButton from "../../actions/CvButton.astro";
+import ProjectsLink from "../../actions/ProjectsLink.astro";
+
+interface Props {
+    class?: string;
+}
+---
+
+<div class:list={["flex flex-wrap items-center gap-6", Astro.props.class]}>
+    <ContactButton />
+    <CvButton />
+    <ProjectsLink />
+</div>
