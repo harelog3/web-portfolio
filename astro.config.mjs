@@ -9,6 +9,7 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
+    site: "https://harelolguin.dev",
 
     i18n: {
         locales: ["en", "es"],
