@@ -1,0 +1,17 @@
+---
+import type { GetStaticPaths } from "astro";
+
+import Button from "../../components/Button.tsx";
+import { getLocale, locales, useTranslations } from "../../i18n/utils";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// One file renders every locale; each is prerendered as a static page (/en/, /es/).
+export const getStaticPaths = (() =>
+    locales.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+---
+
+<BaseLayout>
+    <Button client:load label={t("counter.label")} />
+</BaseLayout>

@@ -1,6 +1,7 @@
 ## Stack
 
 - [Astro](https://docs.astro.build) v7 (static output) + Tailwind CSS v4 via `@tailwindcss/vite`
+- Deployed to Cloudflare Workers via `@astrojs/cloudflare` (`wrangler.jsonc`). Pages are prerendered by default; only routes with `export const prerender = false` run in the Worker.
 - Global styles / Tailwind entry: `src/styles/global.css`
 - Package manager: **pnpm** (do not use npm or yarn; keep `pnpm-lock.yaml` in sync)
 - Node `>=22.23.4`
@@ -18,6 +19,9 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 Other commands:
 
 - `pnpm build` — production build to `dist/`
+- `pnpm build && pnpm exec wrangler dev` — preview the built Worker locally
+- `pnpm exec wrangler deploy` — deploy to Cloudflare (after `pnpm build`)
+- `pnpm generate-types` — regenerate Cloudflare binding types (`worker-configuration.d.ts`)
 - `pnpm astro check` — type-check `.astro` and TS files
 - `pnpm fmt` — format the whole project with oxfmt
 - `pnpm fmt:check` — verify formatting without writing
@@ -30,6 +34,11 @@ Other commands:
 - Style: 4-space indent, double quotes, semicolons, trailing commas, 100 columns.
 - Imports and Tailwind classes are sorted automatically — don't hand-sort them.
 - Whitespace in `.astro` files follows Astro v7's `compressHTML: "jsx"` rules: whitespace between inline elements across lines is dropped, so use `{" "}` for an intentional space.
+
+## Code comments
+
+- Write code comments in English.
+- Add them where they explain _why_ (non-obvious decisions, constraints, trade-offs), not to restate _what_ the code does.
 
 ## Commits
 

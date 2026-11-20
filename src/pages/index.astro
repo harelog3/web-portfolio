@@ -1,18 +1,24 @@
 ---
-import "../styles/global.css";
-import Button from "../components/Button.tsx";
----
+import { defaultLang } from "../i18n/ui";
+import { isLocale } from "../i18n/utils";
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <title>Astro</title>
-    </head>
-    <body>
-        <Button client:load />
-    </body>
-</html>
+// Entry point only: it never renders HTML, it redirects to /<locale>/.
+// `preferredLocale` reads Accept-Language, which only exists per request, so this
+// route must render on demand. Every other page stays static.
+export const prerender = false;
+
+// Priority: an explicit choice from the language picker, then the browser's
+// languages, then the default.
+const cookieLocale = Astro.cookies.get("locale")?.value;
+const locale = isLocale(cookieLocale) ? cookieLocale : (Astro.preferredLocale ?? defaultLang);
+
+return new Response(null, {
+    status: 302,
+    headers: {
+        Location: `/${locale}/`,
+        // The target depends on per-user headers, so caches must not share it.
+        Vary: "Accept-Language, Cookie",
+        "Cache-Control": "private, no-store",
+    },
+});
+---

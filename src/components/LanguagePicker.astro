@@ -1,0 +1,40 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import { languages } from "../i18n/ui";
+import { getLocale, locales, useTranslations } from "../i18n/utils";
+
+const current = getLocale(Astro.currentLocale);
+const t = useTranslations(current);
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/[^/]+\/?/, "");
+---
+
+<nav aria-label={t("nav.language")}>
+    <ul class="flex gap-3">
+        {locales.map((lang) => (
+            <li>
+                <a
+                    href={getRelativeLocaleUrl(lang, pathWithoutLocale)}
+                    lang={lang}
+                    hreflang={lang}
+                    aria-current={lang === current ? "page" : undefined}
+                    data-locale={lang}
+                    class="inline-flex min-h-6 min-w-6 items-center underline-offset-4 hover:underline aria-[current=page]:font-bold"
+                >
+                    {languages[lang]}
+                </a>
+            </li>
+        ))}
+    </ul>
+</nav>
+
+<script>
+    // Remember an explicit language choice so the root redirect (src/pages/index.astro)
+    // prefers it over the browser's Accept-Language on later visits.
+    document.querySelectorAll<HTMLAnchorElement>("a[data-locale]").forEach((link) => {
+        link.addEventListener("click", () => {
+            const maxAge = 60 * 60 * 24 * 365;
+            document.cookie = `locale=${link.dataset.locale}; path=/; max-age=${maxAge}; SameSite=Lax`;
+        });
+    });
+</script>
