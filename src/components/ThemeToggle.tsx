@@ -22,6 +22,14 @@ function resolveTheme(): Theme {
     return readStored() ?? (darkQuery().matches ? "dark" : "light");
 }
 
+// Keeps the mobile browser toolbar in step with a manual choice; the colors live on
+// the meta tags (BaseLayout.astro) so they aren't duplicated here.
+function syncThemeColor(next: Theme) {
+    document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
+        meta.content = meta.dataset[next] ?? meta.content;
+    });
+}
+
 interface Props {
     variant: "icon" | "full";
     labels: {
@@ -47,6 +55,7 @@ export default function ThemeToggle(props: Props) {
     const toggle = () => {
         const next: Theme = (theme() ?? resolveTheme()) === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = next;
+        syncThemeColor(next);
         try {
             localStorage.setItem("theme", next);
         } catch {
