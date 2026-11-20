@@ -1,7 +1,8 @@
 ---
+import { Font } from "astro:assets";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-import LanguagePicker from "../components/LanguagePicker.astro";
+import Header from "../components/Header.astro";
 import { getLocale, locales, useTranslations } from "../i18n/utils";
 
 import "../styles/global.css";
@@ -19,15 +20,45 @@ const pathWithoutLocale = Astro.url.pathname.replace(/^\/[^/]+\/?/, "");
 // Search engines want absolute hreflang URLs, which need `site` in astro.config.
 // Until the production domain is set, emit root-relative URLs instead of baking
 // the build-time origin (localhost) into the static HTML.
+// Browser UI color (mobile toolbar). Mirrors --color-bg in src/styles/global.css.
+const themeColor = { light: "#eee8dc", dark: "#12150f" };
+
 const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
 ---
 
 <html lang={locale}>
     <head>
         <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        {(["light", "dark"] as const).map((scheme) => (
+            <meta
+                name="theme-color"
+                media={`(prefers-color-scheme: ${scheme})`}
+                content={themeColor[scheme]}
+                data-light={themeColor.light}
+                data-dark={themeColor.dark}
+            />
+        ))}
+        {/* Applies a stored theme choice before first paint, so there's no flash of the
+            OS theme; with no choice stored, the CSS already follows the OS on its own. */}
+        <script is:inline>
+            try {
+                const theme = localStorage.getItem("theme");
+                if (theme === "light" || theme === "dark") {
+                    document.documentElement.dataset.theme = theme;
+                    // Both media variants get the chosen color, so the toolbar matches
+                    // even when the stored choice differs from the OS.
+                    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
+                        meta.content = meta.dataset[theme];
+                    });
+                }
+            } catch {}
+        </script>
+        <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width" />
+        {/* Lets the browser paint the canvas and native controls in the right scheme before CSS loads. */}
+        <meta name="color-scheme" content="light dark" />
+        <Font cssVariable="--font-fira-code" preload />
         <meta name="generator" content={Astro.generator} />
         <meta name="description" content={t("site.description")} />
         <title>{title}</title>
@@ -42,10 +73,8 @@ const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : 
         <link rel="alternate" hreflang="x-default" href={toHref("/")} />
     </head>
     <body>
-        <header>
-            <LanguagePicker />
-        </header>
-        <main>
+        <Header />
+        <main id="main">
             <slot />
         </main>
     </body>

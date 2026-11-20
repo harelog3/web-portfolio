@@ -1,1 +1,144 @@
 @import "tailwindcss";
+
+/*
+ * Sedimento theme: "Día" (light) and "Noche" (dark).
+ * Source of truth: the Sedimento design system (tokens.json + README).
+ *
+ * Every color token holds both values via light-dark(), which resolves against the
+ * element's color-scheme. That lets the OS preference drive the theme with pure CSS
+ * (no script, no flash of the wrong theme), and a future toggle only has to set
+ * data-theme="light|dark" on <html> to override it.
+ */
+:root {
+    color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+/*
+ * Tokens already switch on their own, so `dark:` should rarely be needed. When it is,
+ * it must agree with the tokens: follow the OS unless data-theme forces a side.
+ */
+@custom-variant dark {
+    &:where([data-theme="dark"], [data-theme="dark"] *) {
+        @slot;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        &:not(:where([data-theme="light"], [data-theme="light"] *)) {
+            @slot;
+        }
+    }
+}
+
+/*
+ * Default namespaces are cleared so only the system's values generate utilities;
+ * an off-palette class like `bg-red-500` simply produces no CSS.
+ */
+@theme {
+    --color-*: initial;
+    --color-bg: light-dark(#eee8dc, #12150f);
+    --color-bg-raised: light-dark(#f6f2ea, #1a1e17);
+    --color-bg-sunken: light-dark(#e4dccb, #0d0f0b);
+    --color-ink: light-dark(#1c1f1a, #e8e2d4);
+    --color-ink-muted: light-dark(#4d5247, #adac9c);
+    /* Only on bg or bg-raised; it fails contrast on bg-sunken. */
+    --color-ink-faint: light-dark(#666a5e, #85877a);
+    /* Decorative only; control borders need rule-strong for 3:1. */
+    --color-rule: light-dark(#d3cab6, #2a2f25);
+    --color-rule-strong: light-dark(#857c6a, #6a7162);
+    --color-moss: light-dark(#3d5a30, #a3bd84);
+    --color-on-moss: light-dark(#f4f0e6, #12150f);
+    --color-oxide: light-dark(#9e4119, #e8865a);
+    /* Highlighter background only, never a text color. */
+    --color-ochre: light-dark(#d9a53a, #e3b451);
+    --color-on-ochre: light-dark(#1c1f1a, #12150f);
+    --color-clay: light-dark(#d8c3a5, #3a3428);
+    --color-focus: var(--color-oxide);
+
+    /* Ligatures on, so `->`, `=>` and `!=` render like in the editor. */
+    --default-font-feature-settings: "calt" 1, "liga" 1;
+
+    /*
+     * One class applies a whole text style (size, leading, tracking, weight).
+     * Sizes are in rem so they scale with the user's font-size setting.
+     */
+    --text-*: initial;
+    --text-display-xl: 4.5rem;
+    --text-display-xl--line-height: 1;
+    --text-display-xl--letter-spacing: -0.045em;
+    --text-display-xl--font-weight: 700;
+    --text-display: 2.75rem;
+    --text-display--line-height: 1.05;
+    --text-display--letter-spacing: -0.035em;
+    --text-display--font-weight: 700;
+    --text-heading: 1.625rem;
+    --text-heading--line-height: 1.2;
+    --text-heading--letter-spacing: -0.02em;
+    --text-heading--font-weight: 600;
+    --text-subheading: 1.125rem;
+    --text-subheading--line-height: 1.4;
+    --text-subheading--letter-spacing: -0.01em;
+    --text-subheading--font-weight: 600;
+    --text-body: 1rem;
+    --text-body--line-height: 1.65;
+    --text-body-sm: 0.875rem;
+    --text-body-sm--line-height: 1.6;
+    --text-label: 0.75rem;
+    --text-label--line-height: 1.4;
+    --text-label--letter-spacing: 0.06em;
+    --text-label--font-weight: 500;
+    --text-micro: 0.6875rem;
+    --text-micro--line-height: 1.5;
+    --text-micro--letter-spacing: 0.02em;
+
+    /*
+     * The default 4px spacing step already matches the system scale
+     * (space-1/2/3/4/6/8/12/24 = p-1/2/3/4/6/8/12/24); only the gutter is named.
+     */
+    --spacing-gutter: 3rem;
+
+    /* Square corners by default (rounded-none); the status dot uses rounded-full. */
+    --radius-*: initial;
+    --radius-1: 2px;
+
+    /* The only shadow is a hard, offset "stamp"; nothing floats with blur. */
+    --shadow-*: initial;
+    --shadow-stamp: 3px 3px 0 0 light-dark(#1c1f1a, #a3bd84);
+
+    --container-content: 70rem;
+    --container-measure: 64ch;
+}
+
+/* inline: the Fira Code variable is defined by Astro's <Font /> in the page head. */
+@theme inline {
+    --font-*: initial;
+    --font-mono: var(--font-fira-code);
+    --default-font-family: var(--font-fira-code);
+}
+
+@layer base {
+    /* Keeps anchor targets (#experience) from landing under the sticky header. */
+    html {
+        scroll-padding-top: --spacing(15);
+    }
+
+    body {
+        @apply bg-bg text-body text-ink;
+    }
+
+    ::selection {
+        @apply bg-ochre text-on-ochre;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+    }
+}

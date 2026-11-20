@@ -1,0 +1,145 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import { getLocale, useTranslations } from "../i18n/utils";
+import LanguagePicker from "./LanguagePicker.astro";
+import ThemeToggle from "./ThemeToggle.tsx";
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const home = getRelativeLocaleUrl(locale, "");
+const projects = getRelativeLocaleUrl(locale, "projects");
+const path = Astro.url.pathname.replace(/\/?$/, "/");
+
+// Section anchors (experience, contact) live on the home page and are never marked
+// current: aria-current="page" only means "this is the page you're on".
+const links = [
+    { href: home, label: t("nav.home"), current: path === home },
+    { href: projects, label: t("nav.projects"), current: path.startsWith(projects) },
+    { href: `${home}#experience`, label: t("nav.experience"), current: false },
+    { href: `${home}#contact`, label: t("nav.contact"), current: false },
+];
+
+const themeLabels = {
+    toggle: t("theme.toggle"),
+    toDark: t("theme.toDark"),
+    toLight: t("theme.toLight"),
+};
+---
+
+<a
+    href="#main"
+    class="fixed top-2 left-2 z-20 -translate-y-[200%] bg-moss px-4 py-3 text-body-sm text-on-moss focus:translate-y-0"
+>
+    {t("nav.skip")}
+</a>
+
+<header class="group sticky top-0 z-10 border-b border-rule bg-bg">
+    <div class="px-5 lg:px-12">
+        <div class="mx-auto flex h-15 max-w-content items-center justify-between gap-6 text-body-sm lg:grid lg:grid-cols-[1fr_auto_1fr]">
+            <a href={home} class="justify-self-start font-semibold no-underline">
+                <span class="font-normal text-ink-faint">~/</span>harel
+            </a>
+
+            <nav aria-label={t("nav.main")} class="hidden lg:block">
+                <ul class="flex gap-8">
+                    {links.map((link) => (
+                        <li>
+                            <a
+                                href={link.href}
+                                aria-current={link.current ? "page" : undefined}
+                                class="flex h-15 items-center border-b-2 border-transparent text-ink-muted no-underline transition-colors hover:text-ink aria-[current=page]:border-moss aria-[current=page]:font-semibold aria-[current=page]:text-moss"
+                            >
+                                {link.label}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+
+            <div class="hidden items-center gap-4 justify-self-end lg:flex">
+                <span class="inline-flex items-center gap-2 text-label">
+                    <span aria-hidden="true" class="size-2 rounded-full bg-moss"></span>
+                    {t("nav.available")}
+                </span>
+                <LanguagePicker />
+                <ThemeToggle client:load variant="icon" labels={themeLabels} />
+            </div>
+
+            {/* popovertarget gives open/close, Esc, light dismiss and aria-expanded without JS. */}
+            <button
+                type="button"
+                popovertarget="nav-sheet"
+                class="inline-flex h-10 cursor-pointer items-center rounded-1 border border-rule-strong px-3.5 text-ink transition-colors hover:border-ink lg:hidden"
+            >
+                <span class="group-has-[:popover-open]:hidden">{t("nav.menu")}</span>
+                <span class="hidden group-has-[:popover-open]:inline">
+                    {t("nav.close")} <span aria-hidden="true">×</span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    {/* Starts below the bar so the menu button stays visible and clickable as "close". */}
+    <div
+        id="nav-sheet"
+        popover
+        class="fixed inset-x-0 top-15 bottom-0 m-0 h-auto max-h-none w-auto max-w-none flex-col border-0 border-t border-ink bg-bg-raised px-5 pt-6 pb-8 text-ink open:flex lg:hidden"
+    >
+        <nav aria-label={t("nav.main")}>
+            <ul class="flex flex-col">
+                {links.map((link, i) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            aria-current={link.current ? "page" : undefined}
+                            class="flex items-baseline justify-between border-b border-rule py-4.5 text-heading no-underline aria-[current=page]:text-moss"
+                        >
+                            {link.label}
+                            <span aria-hidden="true" class="text-label font-normal text-oxide">
+                                {String(i + 1).padStart(2, "0")}
+                            </span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+
+        <div class="mt-auto flex flex-wrap items-center justify-between gap-4 text-body-sm">
+            <span class="inline-flex items-center gap-2">
+                <span aria-hidden="true" class="size-2 rounded-full bg-moss"></span>
+                {t("nav.available")}
+            </span>
+            <div class="flex items-center gap-2">
+                <LanguagePicker size="lg" />
+                <ThemeToggle client:load variant="full" labels={themeLabels} />
+            </div>
+        </div>
+    </div>
+</header>
+
+<style is:global>
+    /* Lock page scroll behind the open sheet; scoped to mobile so a sheet left open
+       while resizing past the breakpoint (where it's hidden) can't freeze the page. */
+    @media (width < 64rem) {
+        html:has(#nav-sheet:popover-open) {
+            overflow: hidden;
+        }
+    }
+</style>
+
+<script>
+    // Same-page anchors (#experience) don't navigate away, so the sheet would stay open.
+    const sheet = document.getElementById("nav-sheet");
+    sheet?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => sheet.hidePopover());
+    });
+
+    // The sheet is a non-modal popover, so Tab would continue into the page it covers
+    // (WCAG 2.4.11). Making the content behind it inert keeps focus in the header and sheet.
+    const main = document.getElementById("main");
+    sheet?.addEventListener("toggle", (event) => {
+        if (main) main.inert = (event as ToggleEvent).newState === "open";
+    });
+</script>

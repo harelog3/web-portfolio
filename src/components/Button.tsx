@@ -6,7 +6,7 @@ export default function Button(props: { label: string }) {
     return (
         <button
             onclick={() => setCount((v) => v + 1)}
-            class="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-white transition-all hover:bg-emerald-500 active:translate-y-0.5"
+            class="cursor-pointer rounded-1 bg-moss px-4 py-3 text-on-moss transition-all hover:-translate-y-0.5 hover:shadow-stamp active:translate-y-0 active:shadow-none motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
             {props.label}: {count()}
         </button>

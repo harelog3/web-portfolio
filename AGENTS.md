@@ -35,6 +35,12 @@ Other commands:
 - Imports and Tailwind classes are sorted automatically — don't hand-sort them.
 - Whitespace in `.astro` files follows Astro v7's `compressHTML: "jsx"` rules: whitespace between inline elements across lines is dropped, so use `{" "}` for an intentional space.
 
+## Interactivity
+
+- Prefer SolidJS components (islands with a `client:*` directive) when a component needs JS interactivity, instead of `<script>` tags in `.astro` files.
+- A plain `<script>` is fine only when it's necessary: code that must run before first paint (e.g. the inline theme script in `<head>`, which an island would hydrate too late), or a few lines that complement a native platform feature (e.g. Popover API, `<dialog>`) where a framework adds nothing.
+- Prefer native HTML behavior (popover, `<details>`, `<dialog>`, links) over JS when it covers the need.
+
 ## Code comments
 
 - Write code comments in English.
