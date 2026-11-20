@@ -114,6 +114,15 @@
 
     --container-content: 70rem;
     --container-measure: 64ch;
+
+    /* steps(1) makes the cursor blink on/off like an editor's, with no fade. */
+    --animate-blink: blink 1s steps(1) infinite;
+
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+    }
 }
 
 /* inline: the Fira Code variable is defined by Astro's <Font /> in the page head. */

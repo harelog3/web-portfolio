@@ -23,7 +23,6 @@ const en = {
     "theme.toggle": "toggle theme",
     "theme.toDark": "switch to dark theme",
     "theme.toLight": "switch to light theme",
-    "counter.label": "Counter",
 };
 
 export const ui = {
@@ -45,7 +44,6 @@ export const ui = {
         "theme.toggle": "cambiar tema",
         "theme.toDark": "cambiar a tema noche",
         "theme.toLight": "cambiar a tema día",
-        "counter.label": "Contador",
     } satisfies Record<keyof typeof en, string>,
 } as const;
 

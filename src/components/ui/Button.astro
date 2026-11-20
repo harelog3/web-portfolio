@@ -1,0 +1,37 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Variant = "primary" | "secondary" | "ghost";
+
+// Navigation and downloads are links (`href`); anything else is a real <button>.
+type Props = { variant?: Variant } & (
+    | ({ href: string } & HTMLAttributes<"a">)
+    | ({ href?: never } & HTMLAttributes<"button">)
+);
+
+const { variant = "primary", href, class: className, ...rest } = Astro.props;
+
+const base = "inline-flex cursor-pointer items-center gap-2 text-body-sm no-underline";
+
+const variants: Record<Variant, string> = {
+    // Lifts 2px and "stamps" a hard shadow, per the system's only shadow.
+    primary:
+        "h-12 rounded-1 bg-moss px-6 font-medium text-on-moss transition hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-stamp active:translate-none active:shadow-none motion-reduce:transition-none motion-reduce:hover:translate-none",
+    secondary:
+        "h-12 rounded-1 border border-rule-strong px-5 text-ink transition-colors hover:border-ink",
+    // No box, but still a 44px-tall target (WCAG 2.5.8).
+    ghost: "min-h-11 text-moss underline-offset-4 hover:underline",
+};
+
+const classes = [base, variants[variant], className];
+---
+
+{href !== undefined ? (
+    <a href={href} class:list={classes} {...(rest as HTMLAttributes<"a">)}>
+        <slot />
+    </a>
+) : (
+    <button type="button" class:list={classes} {...(rest as HTMLAttributes<"button">)}>
+        <slot />
+    </button>
+)}
