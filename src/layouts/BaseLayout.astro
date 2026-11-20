@@ -1,0 +1,52 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import LanguagePicker from "../components/LanguagePicker.astro";
+import { getLocale, locales, useTranslations } from "../i18n/utils";
+
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+}
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const title = Astro.props.title ?? t("site.title");
+
+// Strip the locale prefix so alternates point to the same page in each language.
+const pathWithoutLocale = Astro.url.pathname.replace(/^\/[^/]+\/?/, "");
+// Search engines want absolute hreflang URLs, which need `site` in astro.config.
+// Until the production domain is set, emit root-relative URLs instead of baking
+// the build-time origin (localhost) into the static HTML.
+const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
+---
+
+<html lang={locale}>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <meta name="description" content={t("site.description")} />
+        <title>{title}</title>
+        {locales.map((lang) => (
+            <link
+                rel="alternate"
+                hreflang={lang}
+                href={toHref(getRelativeLocaleUrl(lang, pathWithoutLocale))}
+            />
+        ))}
+        {/* The root URL picks a language per visitor, which is what x-default means. */}
+        <link rel="alternate" hreflang="x-default" href={toHref("/")} />
+    </head>
+    <body>
+        <header>
+            <LanguagePicker />
+        </header>
+        <main>
+            <slot />
+        </main>
+    </body>
+</html>
