@@ -1,9 +1,29 @@
 {
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
-    "ignorePatterns": [],
-    "astro": true,
+    "ignorePatterns": [
+        "dist/",
+        ".astro/",
+        "pnpm-lock.yaml",
+        "skills-lock.json",
+        ".claude/skills/",
+        "public/"
+    ],
+    "astro": {
+        "compressHTML": "jsx"
+    },
     "tabWidth": 4,
     "semi": true,
     "singleQuote": false,
-    "trailingComma": "all"
+    "trailingComma": "all",
+    "printWidth": 100,
+    "endOfLine": "lf",
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "proseWrap": "preserve",
+    "sortImports": true,
+    "sortPackageJson": true,
+    "sortTailwindcss": {
+        "stylesheet": "./src/styles/global.css",
+        "functions": ["clsx", "cn", "cva", "tw"]
+    }
 }
