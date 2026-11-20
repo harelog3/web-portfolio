@@ -112,7 +112,8 @@
     --shadow-*: initial;
     --shadow-stamp: 3px 3px 0 0 light-dark(#1c1f1a, #a3bd84);
 
-    --container-content: 70rem;
+    /* 1280px: wider than the system's 1120px, which left too much empty space on large screens. */
+    --container-content: 80rem;
     --container-measure: 64ch;
 
     /* steps(1) makes the cursor blink on/off like an editor's, with no fade. */
