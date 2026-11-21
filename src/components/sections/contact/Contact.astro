@@ -10,12 +10,25 @@ const titleId = "contact-title";
 ---
 
 {/* Numbered 04 (and line 142) as in the design: 03 is reserved for projects. */}
-<Section id="contact" aria-labelledby={titleId} lines={1} start={142} class="reveal pt-24">
-    <SectionHeading id={titleId} number="04" title={t("contact.title")} class="mb-10">
+<Section
+    id="contact"
+    aria-labelledby={titleId}
+    lines={1}
+    start={142}
+    class="pt-24"
+    gutterClass="reveal"
+>
+    <SectionHeading
+        id={titleId}
+        number="04"
+        title={t("contact.title")}
+        class="mb-10 reveal"
+        ruleClass="reveal-deposit"
+    >
         <Fragment slot="aside">{t("contact.note")}</Fragment>
     </SectionHeading>
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        <ContactIntro />
-        <ContactForm />
+        <ContactIntro class="reveal" />
+        <ContactForm class="reveal lg:reveal-offset-1" />
     </div>
 </Section>

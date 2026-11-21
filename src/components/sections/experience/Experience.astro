@@ -35,8 +35,21 @@ const yearsSince = (value: string) => {
 };
 ---
 
-<Section id="experience" aria-labelledby={titleId} lines={1} start={58} class="reveal pt-24">
-    <SectionHeading id={titleId} number="02" title={t("experience.title")} class="mb-10">
+<Section
+    id="experience"
+    aria-labelledby={titleId}
+    lines={1}
+    start={58}
+    class="pt-24"
+    gutterClass="reveal"
+>
+    <SectionHeading
+        id={titleId}
+        number="02"
+        title={t("experience.title")}
+        class="mb-10 reveal"
+        ruleClass="reveal-deposit"
+    >
         <Fragment slot="aside">{t("experience.note")}</Fragment>
     </SectionHeading>
     <ol role="list">
@@ -50,6 +63,7 @@ const yearsSince = (value: string) => {
                 start={month(job.start)}
                 end={month(job.end)}
                 tag={job.freelance ? t("experience.freelance") : undefined}
+                class="reveal"
             />
         ))}
     </ol>
@@ -62,5 +76,6 @@ const yearsSince = (value: string) => {
         end={education.end}
         status={t("experience.inProgress")}
         expected={t("experience.iteso.expected")}
+        class="reveal"
     />
 </Section>

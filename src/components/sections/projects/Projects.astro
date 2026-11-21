@@ -33,8 +33,21 @@ const shot = (id: ProjectId, theme: "light" | "dark") =>
     shots[`../../../assets/projects/${id}-${theme}.png`];
 ---
 
-<Section id="projects" aria-labelledby={titleId} lines={1} start={91} class="reveal pt-24">
-    <SectionHeading id={titleId} number="03" title={t("projects.title")} class="mb-8">
+<Section
+    id="projects"
+    aria-labelledby={titleId}
+    lines={1}
+    start={91}
+    class="pt-24"
+    gutterClass="reveal"
+>
+    <SectionHeading
+        id={titleId}
+        number="03"
+        title={t("projects.title")}
+        class="mb-8 reveal"
+        ruleClass="reveal-deposit"
+    >
         <Fragment slot="aside">{t("projects.note")}</Fragment>
     </SectionHeading>
 
@@ -47,6 +60,7 @@ const shot = (id: ProjectId, theme: "light" | "dark") =>
         stack={featured.stack}
         linkLabel={t("projects.viewRepo")}
         newTab={t("footer.newTab")}
+        class="reveal"
     >
         <ProjectsMoveDiagram
             slot="media"
@@ -62,9 +76,11 @@ const shot = (id: ProjectId, theme: "light" | "dark") =>
         />
     </ProjectsFeatured>
 
+    {/* On lg the second column starts revealing a little later, so cards that sit side by
+        side don't land as one block. Literal class names so Tailwind picks them up. */}
     <ul role="list" class="mt-6 grid gap-6 lg:grid-cols-2">
-        {projects.map((project) => (
-            <li class="grid">
+        {projects.map((project, i) => (
+            <li class={i % 2 === 1 ? "grid reveal lg:reveal-offset-1" : "grid reveal"}>
                 <ProjectsCard
                     name={project.name}
                     url={project.url}

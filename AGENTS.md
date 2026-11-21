@@ -1,7 +1,7 @@
 ## Stack
 
 - [Astro](https://docs.astro.build) v7 (static output) + Tailwind CSS v4 via `@tailwindcss/vite`
-- Deployed to Cloudflare Workers via `@astrojs/cloudflare` (`wrangler.jsonc`). Pages are prerendered by default; only routes with `export const prerender = false` run in the Worker.
+- Static output (`dist/`); hosting not decided yet, so keep the project adapter-free and avoid host-specific config.
 - Global styles / Tailwind entry: `src/styles/global.css`
 - Package manager: **pnpm** (do not use npm or yarn; keep `pnpm-lock.yaml` in sync)
 - Node `>=22.23.4`
@@ -19,9 +19,7 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 Other commands:
 
 - `pnpm build` — production build to `dist/`
-- `pnpm build && pnpm exec wrangler dev` — preview the built Worker locally
-- `pnpm exec wrangler deploy` — deploy to Cloudflare (after `pnpm build`)
-- `pnpm generate-types` — regenerate Cloudflare binding types (`worker-configuration.d.ts`)
+- `pnpm preview` — preview the production build locally
 - `pnpm astro check` — type-check `.astro` and TS files
 - `pnpm fmt` — format the whole project with oxfmt
 - `pnpm fmt:check` — verify formatting without writing
@@ -61,7 +59,8 @@ src/i18n/      translatable copy (ui.ts) and helpers
 
 - CSS only, no JS. Utilities live in `src/styles/global.css`.
 - Content visible on load (the hero): `motion-safe:animate-settle` plus `stagger-N` (80ms steps) to order blocks top to bottom. `animate-deposit` (with `origin-left`) is for strata-like bars.
-- Sections below the fold: add `reveal` to the section. It's a scroll-driven animation (`animation-timeline: view()`), already guarded by `@supports` and reduced motion; unsupported browsers just show the content.
+- Sections below the fold: add `reveal` to each block (the heading, every card or item, the gutter via `gutterClass`), never to the `Section` itself or to a block and its ancestor. Use `reveal-deposit` for the heading rule and `reveal-offset-N` to stagger blocks that sit side by side. It's a scroll-driven animation (`animation-timeline: view()`), already guarded by `@supports` and reduced motion; unsupported browsers just show the content.
+- Smooth scrolling for in-page anchors is set globally (only without reduced motion); don't add JS scrolling.
 - Always gate animations with `motion-safe:` (or `motion-reduce:animate-none` for looping ones like the cursor).
 - Page transitions, when there's more than one page: prefer native cross-document view transitions (`@view-transition { navigation: auto; }`, zero JS) over Astro's `<ClientRouter />`.
 
