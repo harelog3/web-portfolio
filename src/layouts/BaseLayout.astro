@@ -56,8 +56,10 @@ const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : 
                 }
             } catch {}
         </script>
-        <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
-        <link rel="icon" href="/favicon.ico" />
+        {/* Same 16px pixel portrait in both: the SVG stays crisp at any size, the .ico is
+            the fallback for browsers without SVG favicons. */}
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width" />
         {/* Lets the browser paint the canvas and native controls in the right scheme before CSS loads. */}
         <meta name="color-scheme" content="light dark" />
