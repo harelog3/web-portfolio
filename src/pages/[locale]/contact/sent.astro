@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import Section from "../../../components/layout/Section.astro";
+import Button from "../../../components/ui/Button.astro";
+import { getLocale, locales, useTranslations } from "../../../i18n/utils";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+// Where Web3Forms sends people after a successful submit (the form's `redirect` field).
+export const getStaticPaths = (() =>
+    locales.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={t("contact.sent.pageTitle")} noindex>
+    <Section lines={1} class="pt-16 lg:pt-24" gutterClass="motion-safe:animate-settle">
+        <h1 class="text-display motion-safe:animate-settle">
+            {t("contact.sent.title")}
+            <span aria-hidden="true" class="text-moss">
+                {" "}
+                ✓
+            </span>
+        </h1>
+        <p class="mt-6 max-w-[44ch] text-ink-muted stagger-1 motion-safe:animate-settle">
+            {t("contact.sent.body")}
+        </p>
+        <Button
+            href={getRelativeLocaleUrl(locale, "")}
+            class="mt-10 stagger-2 motion-safe:animate-settle"
+        >
+            <span aria-hidden="true">←</span>
+            {t("contact.sent.back")}
+        </Button>
+    </Section>
+</BaseLayout>

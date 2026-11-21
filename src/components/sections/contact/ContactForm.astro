@@ -1,0 +1,72 @@
+---
+import { web3forms } from "../../../data/contact";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Button from "../../ui/Button.astro";
+import Field from "../../ui/Field.astro";
+
+interface Props {
+    class?: string;
+}
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+
+// Web3Forms only redirects to an absolute URL on the form's own domain (free plan), so
+// this resolves against `site`. In local dev the redirect lands on production, which is
+// expected: real submissions are tested on the deployed site.
+const redirect = new URL(`/${locale}/contact/sent/`, Astro.site).href;
+---
+
+{/* A plain HTML form: it works without JS and the browser handles validation. */}
+<form
+    method="POST"
+    action={web3forms.endpoint}
+    class:list={[
+        "flex flex-col gap-5 border border-rule-strong bg-bg-raised p-5 sm:p-7",
+        Astro.props.class,
+    ]}
+>
+    <input type="hidden" name="access_key" value={web3forms.accessKey} />
+    <input type="hidden" name="subject" value={t("contact.form.subject")} />
+    <input type="hidden" name="from_name" value={t("contact.form.fromName")} />
+    <input type="hidden" name="redirect" value={redirect} />
+    {/* Honeypot: hidden from people and assistive tech, bots fill it and get dropped. */}
+    <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+    <div class="grid gap-5 sm:grid-cols-2">
+        <Field
+            id="contact-name"
+            label={t("contact.form.name")}
+            name="name"
+            autocomplete="name"
+            required
+            maxlength={100}
+        />
+        {/* Web3Forms uses `email` as the reply-to, so answering goes straight to the sender. */}
+        <Field
+            id="contact-email"
+            label={t("contact.form.email")}
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            maxlength={200}
+        />
+    </div>
+    <Field
+        as="textarea"
+        id="contact-message"
+        label={t("contact.form.message")}
+        name="message"
+        rows={5}
+        required
+        maxlength={5000}
+    />
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <p class="text-label font-normal text-ink-faint">{t("contact.form.privacy")}</p>
+        <Button type="submit">
+            {t("contact.form.submit")}
+            <span aria-hidden="true">→</span>
+        </Button>
+    </div>
+</form>
