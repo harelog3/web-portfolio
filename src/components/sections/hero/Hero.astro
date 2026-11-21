@@ -17,20 +17,28 @@ const cardRows = [
 ];
 ---
 
-<Section lines={3} class="pt-16 lg:pt-24">
+{/* Above the fold, so it animates on load (settle + stagger), not on scroll (reveal). */}
+<Section lines={3} class="pt-16 lg:pt-24" gutterClass="motion-safe:animate-settle">
     <div class="grid items-end gap-16 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div>
-            <p class="mb-7 text-label text-ink-muted">
+            <p class="mb-7 text-label text-ink-muted motion-safe:animate-settle">
                 <span aria-hidden="true" class="text-oxide">
                     §{" "}
                 </span>
                 {t("hero.eyebrow")}
             </p>
-            <HeroTitle greeting={t("hero.greeting")} name={profile.name} />
-            <p class="mt-8 max-w-[56ch] text-ink-muted">{t("hero.lede")}</p>
-            <HeroActions class="mt-10" />
+            <HeroTitle
+                greeting={t("hero.greeting")}
+                name={profile.name}
+                class="stagger-1 motion-safe:animate-settle"
+            />
+            <p class="mt-8 max-w-[56ch] text-ink-muted stagger-2 motion-safe:animate-settle">
+                {t("hero.lede")}
+            </p>
+            <HeroActions class="mt-10 stagger-3 motion-safe:animate-settle" />
         </div>
         <HeroCard
+            class="stagger-4 motion-safe:animate-settle"
             title={t("hero.card.title")}
             number="nº 001"
             rows={cardRows}

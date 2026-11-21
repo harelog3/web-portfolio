@@ -28,12 +28,13 @@ interface Props {
 const { title, avatar, number, rows, class: className } = Astro.props;
 const titleId = "hero-card-title";
 
-// Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif.
+// Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif. On load
+// they are deposited one after another, after the card itself has settled (stagger 4).
 const bands = [
-    "h-7 bg-[repeating-linear-gradient(45deg,var(--color-moss)_0_2px,transparent_2px_6px)]",
-    "h-4 bg-[repeating-linear-gradient(-45deg,var(--color-ochre)_0_2px,transparent_2px_6px)]",
-    "h-2.5 bg-oxide",
-    "h-5.5 bg-[repeating-linear-gradient(0deg,var(--color-clay)_0_2px,transparent_2px_5px)]",
+    "h-7 bg-[repeating-linear-gradient(45deg,var(--color-moss)_0_2px,transparent_2px_6px)] stagger-6",
+    "h-4 bg-[repeating-linear-gradient(-45deg,var(--color-ochre)_0_2px,transparent_2px_6px)] stagger-7",
+    "h-2.5 bg-oxide stagger-8",
+    "h-5.5 bg-[repeating-linear-gradient(0deg,var(--color-clay)_0_2px,transparent_2px_5px)] stagger-9",
 ];
 ---
 
@@ -85,7 +86,13 @@ const bands = [
     </div>
     <div aria-hidden="true" class="border-t border-ink">
         {bands.map((band, i) => (
-            <div class:list={[band, i > 0 && "border-t border-ink"]} />
+            <div
+                class:list={[
+                    "origin-left motion-safe:animate-deposit",
+                    band,
+                    i > 0 && "border-t border-ink",
+                ]}
+            />
         ))}
     </div>
 </aside>

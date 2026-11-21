@@ -124,6 +124,48 @@
             opacity: 0;
         }
     }
+
+    /*
+     * Entrance motion follows the "sediment" idea: blocks settle down into place, and
+     * strata are deposited left to right. `backwards` hides an element only during its
+     * delay; once done it drops back to its own styles (so hover translates still work).
+     * Always apply them with `motion-safe:`.
+     */
+    --animate-settle: settle 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    --animate-deposit: deposit 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+
+    @keyframes settle {
+        from {
+            opacity: 0;
+            translate: 0 -0.5rem;
+        }
+    }
+
+    @keyframes deposit {
+        from {
+            scale: 0 1;
+        }
+    }
+}
+
+/* Staggers entrance animations in 80ms steps: `motion-safe:animate-settle stagger-2`. */
+@utility stagger-* {
+    animation-delay: calc(--value(integer) * 80ms);
+}
+
+/*
+ * For sections below the fold: settles in as it scrolls into view, with no JS. The
+ * progress follows the scroll position. Browsers without scroll-driven animations
+ * (Firefox for now) just show the content, and so does reduced motion.
+ */
+@utility reveal {
+    @media (prefers-reduced-motion: no-preference) {
+        @supports (animation-timeline: view()) {
+            animation: var(--animate-settle);
+            animation-timeline: view();
+            animation-range: entry 0% entry 60%;
+        }
+    }
 }
 
 /* inline: the Fira Code variable is defined by Astro's <Font /> in the page head. */

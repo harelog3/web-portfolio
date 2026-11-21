@@ -6,9 +6,11 @@ interface Props extends HTMLAttributes<"section"> {
     lines?: number;
     /** First line number, so later sections continue the count. */
     start?: number;
+    /** Extra classes for the line-number gutter, e.g. to animate it with the content. */
+    gutterClass?: string;
 }
 
-const { lines = 0, start = 1, class: className, ...rest } = Astro.props;
+const { lines = 0, start = 1, gutterClass, class: className, ...rest } = Astro.props;
 const numbers = Array.from({ length: lines }, (_, i) => String(start + i).padStart(3, "0"));
 ---
 
@@ -17,7 +19,10 @@ const numbers = Array.from({ length: lines }, (_, i) => String(start + i).padSta
     <div class="mx-auto max-w-content lg:grid lg:grid-cols-[var(--spacing-gutter)_minmax(0,1fr)] lg:gap-x-8">
         <div
             aria-hidden="true"
-            class="hidden pt-0.5 text-right text-micro text-ink-faint select-none lg:block"
+            class:list={[
+                "hidden pt-0.5 text-right text-micro text-ink-faint select-none lg:block",
+                gutterClass,
+            ]}
         >
             {numbers.map((n) => (
                 <div>{n}</div>
