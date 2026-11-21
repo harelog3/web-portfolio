@@ -1,3 +1,4 @@
+import cloudflare from "@astrojs/cloudflare";
 import solidJs from "@astrojs/solid-js";
 // @ts-check
 import tailwindcss from "@tailwindcss/vite";
@@ -8,6 +9,7 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
+
     site: "https://harelolguin.dev",
 
     i18n: {
@@ -34,4 +36,5 @@ export default defineConfig({
     ],
 
     integrations: [solidJs()],
+    adapter: cloudflare(),
 });

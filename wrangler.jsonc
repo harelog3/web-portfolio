@@ -1,0 +1,15 @@
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "upload_source_maps": true,
+    "compatibility_date": "2026-11-17",
+    "compatibility_flags": ["global_fetch_strictly_public"],
+    "name": "web-portfolio",
+    "main": "@astrojs/cloudflare/entrypoints/server",
+    "assets": {
+        "directory": "./dist",
+        "binding": "ASSETS",
+    },
+    "observability": {
+        "enabled": true,
+    },
+}
