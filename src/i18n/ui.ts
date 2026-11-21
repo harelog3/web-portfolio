@@ -73,6 +73,33 @@ const en = {
         "Reworked the auth flow and session persistence to integrate with Toshiba's internal SSO.",
     "experience.iteso.degree": "Software Development Engineering",
     "experience.iteso.expected": "(expected)",
+    "projects.title": "projects",
+    "projects.note": "what I've built",
+    "projects.featured": "featured",
+    "projects.team": "team project",
+    "projects.wip": "in progress",
+    "projects.private": "private repo",
+    "projects.viewRepo": "view repository",
+    "projects.move.desc":
+        "A Letterboxd-style social network for movies: log what you watch, rate it and follow other people.",
+    // {h} is replaced by the highlighted words.
+    "projects.move.role":
+        "My part: {h}. Session auth with email verification, the TMDB integration, Redis caching, rate limiting and the Docker image GitHub Actions deploys to ECS.",
+    "projects.move.roleHighlight": "the API and its infrastructure",
+    "projects.move.diagram":
+        "MovE architecture. A Next.js client calls the NestJS API, which runs on AWS ECS. The API stores data in Postgres through Prisma, uses Redis for cache and sessions, DynamoDB for email verifications and S3 for files, and calls the TMDB API for movies and Brevo for email. GitHub Actions builds the image, pushes it to ECR and deploys it to ECS.",
+    "projects.move.diagram.cache": "cache · sessions",
+    "projects.move.diagram.verify": "verifications",
+    "projects.move.diagram.files": "files",
+    "projects.move.diagram.movies": "movies",
+    "projects.move.diagram.email": "email",
+    "projects.move.diagram.deploy": "deploy",
+    "projects.portfolio.desc":
+        "This site. Static Astro with Solid islands, the Sedimento design system and CSS-only motion, deployed to Cloudflare Workers.",
+    "projects.portfolio.alt":
+        "This portfolio's home page: Harel's name, a short intro and the profile card.",
+    "projects.codeHunt.desc":
+        "A marketplace where anyone posts the software they need and developers find paid work or collaborations. Sign-up, login and email verification already work.",
     "contact.title": "contact",
     "contact.note": "I reply within 1–2 days",
     "contact.headline": "Got something in mind? Tell me.",
@@ -166,6 +193,32 @@ export const ui = {
             "Rehice el flujo de autenticación y la persistencia de sesión para integrarlo con el SSO interno de Toshiba.",
         "experience.iteso.degree": "Ingeniería en Desarrollo de Software",
         "experience.iteso.expected": "(estimado)",
+        "projects.title": "proyectos",
+        "projects.note": "lo que he construido",
+        "projects.featured": "destacado",
+        "projects.team": "en equipo",
+        "projects.wip": "en curso",
+        "projects.private": "repo privado",
+        "projects.viewRepo": "ver repositorio",
+        "projects.move.desc":
+            "Una red social de películas al estilo Letterboxd: registras lo que ves, lo calificas y sigues a otras personas.",
+        "projects.move.role":
+            "Mi parte: {h}. Auth con sesiones y verificación de correo, la integración con TMDB, caché en Redis, rate limiting y la imagen Docker que GitHub Actions despliega en ECS.",
+        "projects.move.roleHighlight": "la API y su infraestructura",
+        "projects.move.diagram":
+            "Arquitectura de MovE. Un cliente en Next.js llama a la API en NestJS, que corre en AWS ECS. La API guarda datos en Postgres con Prisma, usa Redis para caché y sesiones, DynamoDB para verificaciones de correo y S3 para archivos, y llama a la API de TMDB para las películas y a Brevo para los correos. GitHub Actions construye la imagen, la sube a ECR y la despliega en ECS.",
+        "projects.move.diagram.cache": "caché · sesiones",
+        "projects.move.diagram.verify": "verificaciones",
+        "projects.move.diagram.files": "archivos",
+        "projects.move.diagram.movies": "películas",
+        "projects.move.diagram.email": "correo",
+        "projects.move.diagram.deploy": "despliegue",
+        "projects.portfolio.desc":
+            "Este sitio. Astro estático con islas de Solid, el sistema visual Sedimento y animaciones solo con CSS, desplegado en Cloudflare Workers.",
+        "projects.portfolio.alt":
+            "La página de inicio de este portafolio: el nombre de Harel, una presentación corta y la tarjeta de perfil.",
+        "projects.codeHunt.desc":
+            "Un marketplace donde cualquiera publica el software que necesita y developers encuentran proyectos pagados o colaboraciones. El registro, el login y la verificación de correo ya funcionan.",
         "contact.title": "contacto",
         "contact.note": "respondo en 1–2 días",
         "contact.headline": "¿Tienes algo en mente? Cuéntame.",

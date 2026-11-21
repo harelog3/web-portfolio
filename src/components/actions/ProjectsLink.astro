@@ -12,7 +12,13 @@ const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 ---
 
-<Button variant="ghost" href={getRelativeLocaleUrl(locale, "projects")} class={Astro.props.class}>
+{/* The projects live in a section of the home page; a page of their own can wait until
+    there are enough of them to need one. */}
+<Button
+    variant="ghost"
+    href={`${getRelativeLocaleUrl(locale, "")}#projects`}
+    class={Astro.props.class}
+>
     {t("actions.projects")}
     <span aria-hidden="true">→</span>
 </Button>

@@ -4,6 +4,7 @@ import type { GetStaticPaths } from "astro";
 import Contact from "../../components/sections/contact/Contact.astro";
 import Experience from "../../components/sections/experience/Experience.astro";
 import Hero from "../../components/sections/hero/Hero.astro";
+import Projects from "../../components/sections/projects/Projects.astro";
 import Stack from "../../components/sections/stack/Stack.astro";
 import { locales } from "../../i18n/utils";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -17,5 +18,6 @@ export const getStaticPaths = (() =>
     <Hero />
     <Stack />
     <Experience />
+    <Projects />
     <Contact />
 </BaseLayout>

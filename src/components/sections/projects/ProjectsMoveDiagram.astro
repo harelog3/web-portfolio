@@ -1,0 +1,152 @@
+---
+interface Props {
+    /** Full description of the diagram, read instead of the drawing. */
+    label: string;
+    sub: {
+        cache: string;
+        verify: string;
+        files: string;
+        movies: string;
+        email: string;
+        deploy: string;
+    };
+    class?: string;
+}
+
+const { label, sub, class: className } = Astro.props;
+
+// Pieces confirmed in Harel-ITESO/mov-e-backend: docker-compose, the AWS services and
+// .github/workflows/deploy.yml. Coordinates are in viewBox units; the SVG scales to fit.
+const data = [
+    { y: 100, name: "postgres", note: "prisma" },
+    { y: 152, name: "redis", note: sub.cache },
+    { y: 204, name: "dynamodb", note: sub.verify },
+    { y: 256, name: "s3", note: sub.files },
+];
+const external = [
+    { x: 300, name: "tmdb api", note: sub.movies },
+    { x: 430, name: "brevo", note: sub.email },
+];
+---
+
+{/* Too detailed to shrink to phone width, so it keeps a minimum size and scrolls
+    sideways inside its box (allowed for diagrams by WCAG 1.4.10). */}
+<div
+    class:list={["overflow-x-auto", className]}
+    tabindex="0"
+    role="region"
+    aria-label={label.split(".")[0]}
+>
+    <svg
+        viewBox="0 0 560 380"
+        role="img"
+        aria-label={label}
+        class="block h-auto w-full min-w-[30rem] text-[13px]"
+    >
+        <defs>
+            <marker
+                id="move-arrow"
+                viewBox="0 0 8 8"
+                refX="7"
+                refY="4"
+                markerWidth="7"
+                markerHeight="7"
+                orient="auto-start-reverse"
+            >
+                <path d="M0 0 8 4 0 8z" class="fill-rule-strong"></path>
+            </marker>
+        </defs>
+
+        <g class="fill-none stroke-rule-strong" stroke-width="1.5">
+            {/* client → api */}
+            <path d="M120 184H178" marker-end="url(#move-arrow)"></path>
+            {/* api → data stores, through one vertical spine */}
+            <path d="M310 184H370M370 120V270"></path>
+            {data.map((d) => (
+                <path d={`M370 ${d.y + 20}H408`} marker-end="url(#move-arrow)"></path>
+            ))}
+            {/* api → external APIs */}
+            <path d="M280 158V86H485"></path>
+            {external.map((e) => (
+                <path d={`M${e.x + 55} 86V62`} marker-end="url(#move-arrow)"></path>
+            ))}
+            {/* deploy: github actions → ecr → ecs */}
+            <path d="M166 334H198" marker-end="url(#move-arrow)"></path>
+            <path d="M240 312V262" marker-end="url(#move-arrow)"></path>
+        </g>
+
+        {/* The ECS service the API runs in. */}
+        <rect
+            x="160"
+            y="110"
+            width="170"
+            height="150"
+            class="fill-none stroke-oxide"
+            stroke-width="1.5"
+            stroke-dasharray="5 4"
+        ></rect>
+        <rect x="168" y="116" width="62" height="20" class="fill-bg-sunken"></rect>
+        <text x="172" y="131" class="fill-oxide">
+            aws ecs
+        </text>
+
+        <rect x="16" y="160" width="104" height="48" class="fill-bg-raised stroke-ink"></rect>
+        <text x="68" y="189" text-anchor="middle" class="fill-ink">
+            next.js
+        </text>
+
+        <rect x="180" y="160" width="130" height="48" class="fill-moss stroke-ink"></rect>
+        <text x="245" y="189" text-anchor="middle" font-weight="600" class="fill-on-moss">
+            nestjs api
+        </text>
+
+        {data.map((d) => (
+            <g>
+                <rect
+                    x="410"
+                    y={d.y}
+                    width="134"
+                    height="40"
+                    class="fill-bg-raised stroke-ink"
+                ></rect>
+                <text x="420" y={d.y + 17} class="fill-ink">
+                    {d.name}
+                </text>
+                <text x="420" y={d.y + 32} class="fill-ink-muted text-[11px]">
+                    {d.note}
+                </text>
+            </g>
+        ))}
+
+        {external.map((e) => (
+            <g>
+                <rect
+                    x={e.x}
+                    y="16"
+                    width="114"
+                    height="44"
+                    class="fill-bg-raised stroke-ink"
+                ></rect>
+                <text x={e.x + 10} y="35" class="fill-ink">
+                    {e.name}
+                </text>
+                <text x={e.x + 10} y="51" class="fill-ink-muted text-[11px]">
+                    {e.note}
+                </text>
+            </g>
+        ))}
+
+        <rect x="16" y="314" width="150" height="40" class="fill-bg-raised stroke-ink"></rect>
+        <text x="26" y="331" class="fill-ink">
+            github actions
+        </text>
+        <text x="26" y="346" class="fill-ink-muted text-[11px]">
+            {sub.deploy}
+        </text>
+
+        <rect x="200" y="314" width="80" height="40" class="fill-bg-raised stroke-ink"></rect>
+        <text x="240" y="339" text-anchor="middle" class="fill-ink">
+            ecr
+        </text>
+    </svg>
+</div>
