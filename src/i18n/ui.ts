@@ -50,6 +50,29 @@ const en = {
     "stack.area.infra": "infra",
     "stack.legend.strong": "strong",
     "stack.legend.familiar": "familiar",
+    "experience.title": "experience",
+    "experience.note": "3 layers · newest on top",
+    "experience.freelance": "freelance",
+    "experience.inProgress": "in progress",
+    "experience.bedrock": "bedrock",
+    "experience.yearsAgo": "−{n} y",
+    "experience.roomieland.role": "Web developer",
+    "experience.roomieland.item.1":
+        "Led frontend development: technical decisions, priorities and task delegation so features shipped in parallel.",
+    "experience.roomieland.item.2":
+        "Designed a Backend for Frontend (BFF) that centralizes backend calls, auth control and response shaping for the web client.",
+    "experience.oracle.role": "Software developer intern",
+    "experience.oracle.item.1":
+        "Built XQuery transformations in an internal IDE that generate telecom product orders as XML.",
+    "experience.oracle.item.2":
+        "Helped deploy and configure a Kubernetes development environment on Oracle cloud infrastructure.",
+    "experience.toshiba.role": "Software developer intern",
+    "experience.toshiba.item.1":
+        "Migrated a frontend from Vue 2 to Vue 3, then built a new one as the project became an AI chatbot.",
+    "experience.toshiba.item.2":
+        "Reworked the auth flow and session persistence to integrate with Toshiba's internal SSO.",
+    "experience.iteso.degree": "Software Development Engineering",
+    "experience.iteso.expected": "(expected)",
     "footer.madeWith": "built with astro, deployed on cloudflare",
     "footer.social": "social",
     "footer.email": "email",
@@ -102,6 +125,29 @@ export const ui = {
         "stack.area.infra": "infra",
         "stack.legend.strong": "domino",
         "stack.legend.familiar": "conozco",
+        "experience.title": "experiencia",
+        "experience.note": "3 capas · lo reciente arriba",
+        "experience.freelance": "freelance",
+        "experience.inProgress": "en curso",
+        "experience.bedrock": "lecho",
+        "experience.yearsAgo": "−{n} a",
+        "experience.roomieland.role": "Desarrollador web",
+        "experience.roomieland.item.1":
+            "Lideré el desarrollo frontend: decisiones técnicas, prioridades y reparto de tareas para avanzar features en paralelo.",
+        "experience.roomieland.item.2":
+            "Diseñé un Backend for Frontend (BFF) que centraliza las llamadas al backend, el control de autenticación y adapta las respuestas al cliente web.",
+        "experience.oracle.role": "Practicante de desarrollo de software",
+        "experience.oracle.item.1":
+            "Desarrollé transformaciones con XQuery en un IDE interno que generan órdenes de productos de telecomunicaciones en XML.",
+        "experience.oracle.item.2":
+            "Colaboré en el despliegue y configuración de un entorno de desarrollo con Kubernetes sobre la infraestructura cloud de Oracle.",
+        "experience.toshiba.role": "Practicante de desarrollo de software",
+        "experience.toshiba.item.1":
+            "Migré un frontend de Vue 2 a Vue 3 y después construí uno nuevo cuando el proyecto se convirtió en un chatbot con IA.",
+        "experience.toshiba.item.2":
+            "Rehice el flujo de autenticación y la persistencia de sesión para integrarlo con el SSO interno de Toshiba.",
+        "experience.iteso.degree": "Ingeniería en Desarrollo de Software",
+        "experience.iteso.expected": "(estimado)",
         "footer.madeWith": "hecho con astro, desplegado en cloudflare",
         "footer.social": "redes",
         "footer.email": "email",
