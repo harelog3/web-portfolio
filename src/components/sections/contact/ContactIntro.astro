@@ -1,0 +1,45 @@
+---
+import { whatsapp } from "../../../data/contact";
+import { profile } from "../../../data/profile";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+
+interface Props {
+    class?: string;
+}
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+
+// The greeting pre-fills the chat, so the first message already says where it came from.
+const whatsappHref = `https://wa.me/${whatsapp}?text=${encodeURIComponent(t("contact.whatsappGreeting"))}`;
+
+const links = [
+    { href: whatsappHref, label: t("contact.whatsapp"), external: true },
+    { href: `mailto:${profile.links.email}`, label: profile.links.email, external: false },
+];
+---
+
+<div class={Astro.props.class}>
+    <p class="text-display">{t("contact.headline")}</p>
+    <p class="mt-6 max-w-[44ch] text-ink-muted">{t("contact.lede")}</p>
+    <ul role="list" class="mt-5 flex flex-col items-start gap-1">
+        {links.map((link) => (
+            <li>
+                {/* min-h-11: a 44px target even though it reads as a plain link (WCAG 2.5.8). */}
+                <a
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener" : undefined}
+                    class="inline-flex min-h-11 items-center text-subheading break-all text-moss underline decoration-2 underline-offset-6 hover:decoration-ink"
+                >
+                    {link.label}
+                    {link.external && (
+                        <>
+                            <span aria-hidden="true">&nbsp;↗</span>
+                            <span class="sr-only"> {t("footer.newTab")}</span>
+                        </>
+                    )}
+                </a>
+            </li>
+        ))}
+    </ul>
+</div>

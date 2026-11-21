@@ -3,7 +3,8 @@ import type { HTMLAttributes } from "astro/types";
 
 type Variant = "primary" | "secondary" | "ghost";
 
-// Navigation and downloads are links (`href`); anything else is a real <button>.
+// Navigation and downloads are links (`href`); anything else is a real <button>, which
+// defaults to type="button" so it never submits a form by accident (pass type="submit").
 type Props = { variant?: Variant } & (
     | ({ href: string } & HTMLAttributes<"a">)
     | ({ href?: never } & HTMLAttributes<"button">)
@@ -24,6 +25,9 @@ const variants: Record<Variant, string> = {
 };
 
 const classes = [base, variants[variant], className];
+
+// Pulled out of `rest` so the attribute is rendered once.
+const { type = "button", ...buttonRest } = rest as HTMLAttributes<"button">;
 ---
 
 {href !== undefined ? (
@@ -31,7 +35,7 @@ const classes = [base, variants[variant], className];
         <slot />
     </a>
 ) : (
-    <button type="button" class:list={classes} {...(rest as HTMLAttributes<"button">)}>
+    <button type={type} class:list={classes} {...buttonRest}>
         <slot />
     </button>
 )}
