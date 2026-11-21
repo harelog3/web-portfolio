@@ -1,0 +1,98 @@
+---
+import StatusDot from "../../ui/StatusDot.astro";
+
+interface Row {
+    term: string;
+    value: string;
+    /** Prefixes the value with the "available" dot. */
+    status?: boolean;
+}
+
+interface Avatar {
+    src: string;
+    alt: string;
+    /** Rendered size; keep it an integer multiple of the art's pixel grid so it stays crisp. */
+    width: number;
+    height: number;
+}
+
+interface Props {
+    title: string;
+    avatar?: Avatar;
+    /** Decorative catalogue number, like a field-notebook sample tag. */
+    number: string;
+    rows: Row[];
+    class?: string;
+}
+
+const { title, avatar, number, rows, class: className } = Astro.props;
+const titleId = "hero-card-title";
+
+// Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif. On load
+// they are deposited one after another, after the card itself has settled (stagger 4).
+const bands = [
+    "h-7 bg-[repeating-linear-gradient(45deg,var(--color-moss)_0_2px,transparent_2px_6px)] stagger-6",
+    "h-4 bg-[repeating-linear-gradient(-45deg,var(--color-ochre)_0_2px,transparent_2px_6px)] stagger-7",
+    "h-2.5 bg-oxide stagger-8",
+    "h-5.5 bg-[repeating-linear-gradient(0deg,var(--color-clay)_0_2px,transparent_2px_5px)] stagger-9",
+];
+---
+
+<aside aria-labelledby={titleId} class:list={["border border-ink bg-bg-raised", className]}>
+    <div class="flex justify-between border-b border-ink px-4 py-2.5 text-micro tracking-[.06em]">
+        <h2 id={titleId}>{title}</h2>
+        <span aria-hidden="true" class="text-oxide">
+            {number}
+        </span>
+    </div>
+    {/* Container query: side by side only when the card itself is wide enough, which
+        depends on the hero grid, not on the viewport. */}
+    <div class="@container">
+        <div class="grid @sm:grid-cols-[auto_minmax(0,1fr)]">
+            {avatar && (
+                // Feet rest on the strata bands below: the person stands on their layers.
+                // In dark mode bg-sunken is as dark as the avatar's hair and clothes, so it
+                // sits on rule-strong instead, with fainter hatching to keep it quiet.
+                <div class="flex items-end justify-center border-b border-ink bg-bg-sunken bg-[repeating-linear-gradient(45deg,var(--color-rule)_0_1px,transparent_1px_7px)] px-5 pt-5 @sm:border-r @sm:border-b-0 dark:bg-rule-strong dark:bg-[repeating-linear-gradient(45deg,var(--color-ink-faint)_0_1px,transparent_1px_7px)]">
+                    <img
+                        src={avatar.src}
+                        alt={avatar.alt}
+                        width={avatar.width}
+                        height={avatar.height}
+                        decoding="async"
+                        class="block"
+                    />
+                </div>
+            )}
+            <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 px-4 pt-2 pb-3.5 text-[0.8125rem] leading-normal">
+                {rows.map((row, i) => {
+                    const divider = i < rows.length - 1 ? "border-b border-dashed border-rule" : "";
+                    return (
+                        <>
+                            {/* Both cells center vertically: next to the avatar the dl stretches
+                                and its rows grow, so a top-aligned dt would sit above its dd. */}
+                            <dt class:list={["flex items-center py-1.75 text-ink-faint", divider]}>
+                                {row.term}
+                            </dt>
+                            <dd class:list={["flex items-center gap-2 py-1.75", divider]}>
+                                {row.status && <StatusDot />}
+                                {row.value}
+                            </dd>
+                        </>
+                    );
+                })}
+            </dl>
+        </div>
+    </div>
+    <div aria-hidden="true" class="border-t border-ink">
+        {bands.map((band, i) => (
+            <div
+                class:list={[
+                    "origin-left motion-safe:animate-deposit",
+                    band,
+                    i > 0 && "border-t border-ink",
+                ]}
+            />
+        ))}
+    </div>
+</aside>

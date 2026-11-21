@@ -1,7 +1,8 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 
-import { getLocale, useTranslations } from "../i18n/utils";
+import { getLocale, useTranslations } from "../../i18n/utils";
+import StatusDot from "../ui/StatusDot.astro";
 import LanguagePicker from "./LanguagePicker.astro";
 import ThemeToggle from "./ThemeToggle.tsx";
 
@@ -60,7 +61,7 @@ const themeLabels = {
 
             <div class="hidden items-center gap-4 justify-self-end lg:flex">
                 <span class="inline-flex items-center gap-2 text-label">
-                    <span aria-hidden="true" class="size-2 rounded-full bg-moss"></span>
+                    <StatusDot />
                     {t("nav.available")}
                 </span>
                 <LanguagePicker />
@@ -108,7 +109,7 @@ const themeLabels = {
 
         <div class="mt-auto flex flex-wrap items-center justify-between gap-4 text-body-sm">
             <span class="inline-flex items-center gap-2">
-                <span aria-hidden="true" class="size-2 rounded-full bg-moss"></span>
+                <StatusDot />
                 {t("nav.available")}
             </span>
             <div class="flex items-center gap-2">

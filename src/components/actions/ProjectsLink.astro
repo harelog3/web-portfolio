@@ -1,0 +1,18 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import { getLocale, useTranslations } from "../../i18n/utils";
+import Button from "../ui/Button.astro";
+
+interface Props {
+    class?: string;
+}
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<Button variant="ghost" href={getRelativeLocaleUrl(locale, "projects")} class={Astro.props.class}>
+    {t("actions.projects")}
+    <span aria-hidden="true">→</span>
+</Button>

@@ -1,0 +1,24 @@
+---
+import { profile } from "../../data/profile";
+import { getLocale, useTranslations } from "../../i18n/utils";
+import Button from "../ui/Button.astro";
+
+interface Props {
+    class?: string;
+}
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+{/* The visible "cv.pdf" starts the accessible name, keeping label-in-name (WCAG 2.5.3). */}
+<Button
+    variant="secondary"
+    href={profile.cv[locale]}
+    download
+    aria-label={t("actions.cvLabel")}
+    class={Astro.props.class}
+>
+    {t("actions.cv")}
+    <span aria-hidden="true">↓</span>
+</Button>

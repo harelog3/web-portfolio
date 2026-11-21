@@ -1,0 +1,19 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import { getLocale, useTranslations } from "../../i18n/utils";
+import Button from "../ui/Button.astro";
+
+interface Props {
+    class?: string;
+}
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+// The contact section lives on the home page, so link to its anchor in the current locale.
+const href = `${getRelativeLocaleUrl(locale, "")}#contact`;
+---
+
+<Button variant="primary" href={href} class={Astro.props.class}>
+    {t("actions.contact")}
+</Button>
