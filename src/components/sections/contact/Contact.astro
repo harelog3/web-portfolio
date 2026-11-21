@@ -1,0 +1,21 @@
+---
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Section from "../../layout/Section.astro";
+import SectionHeading from "../../ui/SectionHeading.astro";
+import ContactForm from "./ContactForm.astro";
+import ContactIntro from "./ContactIntro.astro";
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+const titleId = "contact-title";
+---
+
+{/* Numbered 04 (and line 142) as in the design: 03 is reserved for projects. */}
+<Section id="contact" aria-labelledby={titleId} lines={1} start={142} class="reveal pt-24">
+    <SectionHeading id={titleId} number="04" title={t("contact.title")} class="mb-10">
+        <Fragment slot="aside">{t("contact.note")}</Fragment>
+    </SectionHeading>
+    <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <ContactIntro />
+        <ContactForm />
+    </div>
+</Section>

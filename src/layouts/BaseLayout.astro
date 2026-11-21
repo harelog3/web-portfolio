@@ -10,6 +10,8 @@ import "../styles/global.css";
 
 interface Props {
     title?: string;
+    /** Keeps utility pages (like the form's "sent" page) out of search results. */
+    noindex?: boolean;
 }
 
 const locale = getLocale(Astro.currentLocale);
@@ -62,6 +64,7 @@ const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : 
         <Font cssVariable="--font-fira-code" preload />
         <meta name="generator" content={Astro.generator} />
         <meta name="description" content={t("site.description")} />
+        {Astro.props.noindex && <meta name="robots" content="noindex" />}
         <title>{title}</title>
         {locales.map((lang) => (
             <link

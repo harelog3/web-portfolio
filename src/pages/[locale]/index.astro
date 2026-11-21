@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 
+import Contact from "../../components/sections/contact/Contact.astro";
 import Experience from "../../components/sections/experience/Experience.astro";
 import Hero from "../../components/sections/hero/Hero.astro";
 import Stack from "../../components/sections/stack/Stack.astro";
@@ -16,4 +17,5 @@ export const getStaticPaths = (() =>
     <Hero />
     <Stack />
     <Experience />
+    <Contact />
 </BaseLayout>
