@@ -95,7 +95,7 @@ const en = {
     "projects.move.diagram.email": "email",
     "projects.move.diagram.deploy": "deploy",
     "projects.portfolio.desc":
-        "This site. Static Astro with Solid islands, the Sedimento design system and CSS-only motion, deployed to Cloudflare Workers.",
+        "This site. Static Astro with Solid islands, the Sedimento design system and CSS-only motion.",
     "projects.portfolio.alt":
         "This portfolio's home page: Harel's name, a short intro and the profile card.",
     "projects.codeHunt.desc":
@@ -118,7 +118,7 @@ const en = {
     "contact.sent.title": "Message sent.",
     "contact.sent.body": "Thanks for writing. I'll reply within 1–2 days.",
     "contact.sent.back": "back to home",
-    "footer.madeWith": "built with astro, deployed on cloudflare",
+    "footer.madeWith": "built with astro",
     "footer.social": "social",
     "footer.email": "email",
     "footer.newTab": "(opens in a new tab)",
@@ -214,7 +214,7 @@ export const ui = {
         "projects.move.diagram.email": "correo",
         "projects.move.diagram.deploy": "despliegue",
         "projects.portfolio.desc":
-            "Este sitio. Astro estático con islas de Solid, el sistema visual Sedimento y animaciones solo con CSS, desplegado en Cloudflare Workers.",
+            "Este sitio. Astro estático con islas de Solid, el sistema visual Sedimento y animaciones solo con CSS.",
         "projects.portfolio.alt":
             "La página de inicio de este portafolio: el nombre de Harel, una presentación corta y la tarjeta de perfil.",
         "projects.codeHunt.desc":
@@ -237,7 +237,7 @@ export const ui = {
         "contact.sent.title": "Mensaje enviado.",
         "contact.sent.body": "Gracias por escribir. Te respondo en 1–2 días.",
         "contact.sent.back": "volver al inicio",
-        "footer.madeWith": "hecho con astro, desplegado en cloudflare",
+        "footer.madeWith": "hecho con astro",
         "footer.social": "redes",
         "footer.email": "email",
         "footer.newTab": "(abre en otra pestaña)",

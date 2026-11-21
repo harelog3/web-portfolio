@@ -1,24 +1,57 @@
 ---
-import { defaultLang } from "../i18n/ui";
-import { isLocale } from "../i18n/utils";
+import { defaultLang, languages, ui } from "../i18n/ui";
+import { locales } from "../i18n/utils";
 
-// Entry point only: it never renders HTML, it redirects to /<locale>/.
-// `preferredLocale` reads Accept-Language, which only exists per request, so this
-// route must render on demand. Every other page stays static.
-export const prerender = false;
-
-// Priority: an explicit choice from the language picker, then the browser's
-// languages, then the default.
-const cookieLocale = Astro.cookies.get("locale")?.value;
-const locale = isLocale(cookieLocale) ? cookieLocale : (Astro.preferredLocale ?? defaultLang);
-
-return new Response(null, {
-    status: 302,
-    headers: {
-        Location: `/${locale}/`,
-        // The target depends on per-user headers, so caches must not share it.
-        Vary: "Accept-Language, Cookie",
-        "Cache-Control": "private, no-store",
-    },
-});
+// Entry point only. The site is plain static output (no adapter, host not decided), so there
+// is no server to read cookies or Accept-Language and answer with a redirect. Instead this page
+// picks the locale in the browser before first paint and replaces itself with /<locale>/.
+const defaultHref = `/${defaultLang}/`;
+const canonical = new URL(defaultHref, Astro.site).href;
 ---
+
+<!doctype html>
+<html lang={defaultLang} data-locales={locales.join(" ")} data-default={defaultLang}>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex" />
+        <title>{ui[defaultLang]["site.title"]}</title>
+        <link rel="canonical" href={canonical} />
+        {locales.map((lang) => (
+            <link rel="alternate" hreflang={lang} href={`/${lang}/`} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={defaultHref} />
+        <script is:inline>
+            // Priority: an explicit choice from the language picker (cookie), then the
+            // browser's languages, then the default. `replace` keeps "/" out of history so
+            // the back button doesn't bounce the user straight back here. The locales come
+            // from data attributes on <html> so they're defined once, in src/i18n.
+            const { locales: list = "", default: fallback } = document.documentElement.dataset;
+            const supported = list.split(" ");
+            const isSupported = (value) => supported.includes(value);
+            const cookie = document.cookie
+                .split("; ")
+                .find((entry) => entry.startsWith("locale="))
+                ?.slice("locale=".length);
+            const browser = (navigator.languages ?? [navigator.language])
+                .map((tag) => tag?.split("-")[0].toLowerCase())
+                .find(isSupported);
+            const locale = isSupported(cookie) ? cookie : (browser ?? fallback);
+            location.replace("/" + locale + "/" + location.hash);
+        </script>
+        <noscript>
+            <meta http-equiv="refresh" content={`0; url=${defaultHref}`} />
+        </noscript>
+    </head>
+    <body>
+        <ul>
+            {locales.map((lang) => (
+                <li>
+                    <a href={`/${lang}/`} hreflang={lang} lang={lang}>
+                        {languages[lang]}
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </body>
+</html>
