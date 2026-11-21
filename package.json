@@ -1,6 +1,7 @@
 {
+    "$schema": "https://www.schemastore.org/package.json",
     "name": "web-portfolio",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "type": "module",
     "scripts": {
         "dev": "astro dev",
@@ -22,12 +23,14 @@
         "@astrojs/check": "^0.9.12",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.1",
-        "oxfmt": "^0.79.0"
+        "oxfmt": "^0.79.0",
+        "wrangler": "^4.166.0"
     },
     "lint-staged": {
         "*": "oxfmt --no-error-on-unmatched-pattern"
     },
     "engines": {
         "node": ">=22.23.4"
-    }
+    },
+    "packageManager": "pnpm@12.21.0"
 }

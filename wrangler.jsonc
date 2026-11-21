@@ -1,0 +1,10 @@
+// The site is fully prerendered, so the Worker has no script: it only serves ./dist as static
+// assets. Add `main` (and the Astro adapter) only if a route ever needs on-demand rendering.
+{
+    "$schema": "./node_modules/wrangler/config-schema.json",
+    "name": "web-portfolio",
+    "compatibility_date": "2026-11-17",
+    "assets": {
+        "directory": "./dist",
+    },
+}
