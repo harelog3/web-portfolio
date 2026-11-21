@@ -129,7 +129,7 @@ export const ui = {
         "experience.note": "3 capas · lo reciente arriba",
         "experience.freelance": "freelance",
         "experience.inProgress": "en curso",
-        "experience.bedrock": "lecho",
+        "experience.bedrock": "base",
         "experience.yearsAgo": "−{n} a",
         "experience.roomieland.role": "Desarrollador web",
         "experience.roomieland.item.1":
