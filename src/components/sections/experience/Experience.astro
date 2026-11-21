@@ -1,0 +1,66 @@
+---
+import { education, jobs } from "../../../data/experience";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Section from "../../layout/Section.astro";
+import SectionHeading from "../../ui/SectionHeading.astro";
+import ExperienceBedrock from "./ExperienceBedrock.astro";
+import ExperienceStratum from "./ExperienceStratum.astro";
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+const titleId = "experience-title";
+
+// UTC so a "YYYY-MM" string never slips into the previous month in negative offsets.
+const monthFormat = new Intl.DateTimeFormat(locale, {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+});
+const month = (value: string) => ({
+    label: monthFormat.format(new Date(`${value}-01T00:00:00Z`)).toLowerCase(),
+    datetime: value,
+});
+
+// Years since a layer ended, to one decimal so short internships still read as different
+// depths. Computed at build time: the page is prerendered, so the depth moves with each deploy.
+const now = new Date();
+const depthFormat = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+});
+const yearsSince = (value: string) => {
+    const [year, mon] = value.split("-").map(Number);
+    const months = (now.getUTCFullYear() - year) * 12 + (now.getUTCMonth() + 1 - mon);
+    return depthFormat.format(Math.max(0, months) / 12);
+};
+---
+
+<Section id="experience" aria-labelledby={titleId} lines={1} start={58} class="reveal pt-24">
+    <SectionHeading id={titleId} number="02" title={t("experience.title")} class="mb-10">
+        <Fragment slot="aside">{t("experience.note")}</Fragment>
+    </SectionHeading>
+    <ol role="list">
+        {jobs.map((job) => (
+            <ExperienceStratum
+                org={job.org}
+                role={t(`experience.${job.id}.role`)}
+                items={[t(`experience.${job.id}.item.1`), t(`experience.${job.id}.item.2`)]}
+                band={job.band}
+                depth={t("experience.yearsAgo").replace("{n}", yearsSince(job.end))}
+                start={month(job.start)}
+                end={month(job.end)}
+                tag={job.freelance ? t("experience.freelance") : undefined}
+            />
+        ))}
+    </ol>
+    <ExperienceBedrock
+        label={t("experience.bedrock")}
+        degree={t("experience.iteso.degree")}
+        org={education.org}
+        orgFull={education.orgFull}
+        start={education.start}
+        end={education.end}
+        status={t("experience.inProgress")}
+        expected={t("experience.iteso.expected")}
+    />
+</Section>
