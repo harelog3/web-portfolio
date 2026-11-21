@@ -5,9 +5,10 @@ interface Props {
     familiar: string[];
     /** Tier names, read out before each list so the tier doesn't rely on font weight alone. */
     labels: { strong: string; familiar: string };
+    class?: string;
 }
 
-const { area, strong, familiar, labels } = Astro.props;
+const { area, strong, familiar, labels, class: className } = Astro.props;
 
 const tiers = [
     { label: labels.strong, items: strong, class: "font-semibold text-ink" },
@@ -16,7 +17,12 @@ const tiers = [
 ---
 
 {/* A dl row: dt and dd are the only children allowed besides the wrapping div. */}
-<div class="flex flex-wrap items-baseline gap-x-4 gap-y-2 border-b border-rule py-4">
+<div
+    class:list={[
+        "flex flex-wrap items-baseline gap-x-4 gap-y-2 border-b border-rule py-4",
+        className,
+    ]}
+>
     <dt class="flex shrink-0 items-baseline gap-4">
         <span class="w-37.5 text-label text-ink-muted">{area}</span>
         <span
