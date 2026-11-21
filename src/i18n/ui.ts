@@ -50,6 +50,10 @@ const en = {
     "stack.area.infra": "infra",
     "stack.legend.strong": "strong",
     "stack.legend.familiar": "familiar",
+    "footer.madeWith": "built with astro, deployed on cloudflare",
+    "footer.social": "social",
+    "footer.email": "email",
+    "footer.newTab": "(opens in a new tab)",
 };
 
 export const ui = {
@@ -98,6 +102,10 @@ export const ui = {
         "stack.area.infra": "infra",
         "stack.legend.strong": "domino",
         "stack.legend.familiar": "conozco",
+        "footer.madeWith": "hecho con astro, desplegado en cloudflare",
+        "footer.social": "redes",
+        "footer.email": "email",
+        "footer.newTab": "(abre en otra pestaña)",
     } satisfies Record<keyof typeof en, string>,
 } as const;
 
