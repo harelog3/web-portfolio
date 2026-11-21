@@ -154,18 +154,48 @@
 }
 
 /*
- * For sections below the fold: settles in as it scrolls into view, with no JS. The
+ * For blocks below the fold: settles in as it scrolls into view, with no JS. The
  * progress follows the scroll position. Browsers without scroll-driven animations
  * (Firefox for now) just show the content, and so does reduced motion.
+ *
+ * Put it on each block (heading, card, row), never on a block and one of its ancestors:
+ * the effects would stack and the inner one would run against a moving box.
+ *
+ * The range is a fixed scroll distance rather than a percentage: `entry` percentages are
+ * relative to the element's own height, so a 1px rule would finish instantly while a tall
+ * card would crawl in over a whole screen. The `animation` shorthand must come before
+ * `animation-timeline`, because the shorthand resets the timeline.
  */
 @utility reveal {
     @media (prefers-reduced-motion: no-preference) {
         @supports (animation-timeline: view()) {
             animation: var(--animate-settle);
             animation-timeline: view();
-            animation-range: entry 0% entry 60%;
+            animation-range: entry var(--reveal-offset, 0px) entry
+                calc(min(30vh, 14rem) + var(--reveal-offset, 0px));
         }
     }
+}
+
+/* Same as `reveal`, but deposits a strata-like bar left to right (pair it with origin-left). */
+@utility reveal-deposit {
+    @media (prefers-reduced-motion: no-preference) {
+        @supports (animation-timeline: view()) {
+            animation: var(--animate-deposit);
+            animation-timeline: view();
+            animation-range: entry var(--reveal-offset, 0px) entry
+                calc(min(30vh, 14rem) + var(--reveal-offset, 0px));
+        }
+    }
+}
+
+/*
+ * Staggers side-by-side blocks that enter the viewport together: `lg:reveal-offset-1`.
+ * On a scroll timeline animation-delay (stagger-*) means nothing, so the start of the
+ * range is pushed back by a scroll distance instead.
+ */
+@utility reveal-offset-* {
+    --reveal-offset: calc(--value(integer) * 3rem);
 }
 
 /* inline: the Fira Code variable is defined by Astro's <Font /> in the page head. */
@@ -179,6 +209,16 @@
     /* Keeps anchor targets (#experience) from landing under the sticky header. */
     html {
         scroll-padding-top: --spacing(15);
+    }
+
+    /*
+     * In-page anchors (#contact) glide instead of jumping, which keeps the reader oriented.
+     * Reduced motion keeps the instant jump; scroll-padding-top applies either way.
+     */
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
     }
 
     body {
