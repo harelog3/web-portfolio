@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 
 import CodeHuntMarkDark from "../../../assets/projects/codeHunt-mark-dark.svg";
 import CodeHuntMarkLight from "../../../assets/projects/codeHunt-mark-light.svg";
+import PortfolioMark from "../../../assets/projects/portfolio-mark.svg";
 import { featured, projects, type ProjectId } from "../../../data/projects";
 import { getLocale, useTranslations } from "../../../i18n/utils";
 import Section from "../../layout/Section.astro";
@@ -92,6 +93,21 @@ const shot = (id: ProjectId, theme: "light" | "dark") =>
                                     class="hidden size-full object-cover object-left-top dark:block"
                                 />
                             </Fragment>
+                        )}
+                    {/* Until there are screenshots, the 16px pixel portrait stands in. Its
+                        cream ground is part of the art (the dark hair needs it), so it reads as a
+                        stamp with a border in both themes. 64px = 4× the grid, so it stays crisp. */}
+                    {project.id === "portfolio" &&
+                        !(shot("portfolio", "light") && shot("portfolio", "dark")) && (
+                            <div
+                                slot="media"
+                                class="flex size-full items-center justify-center bg-bg-raised"
+                            >
+                                <PortfolioMark
+                                    aria-hidden="true"
+                                    class="size-16 border border-ink"
+                                />
+                            </div>
                         )}
                     {/* Its own brand colors, so it sits on a plain tile instead of the
                         hatching. Decorative: the name is right next to it. */}
