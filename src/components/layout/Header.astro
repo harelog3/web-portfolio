@@ -12,12 +12,14 @@ const t = useTranslations(locale);
 const home = getRelativeLocaleUrl(locale, "");
 const path = Astro.url.pathname.replace(/\/?$/, "/");
 
-// Section anchors (projects, experience, contact) live on the home page and are never
-// marked current: aria-current="page" only means "this is the page you're on".
+// In page order, so the scrollspy highlight moves left to right as you scroll down. "home"
+// points at #top (a fragment HTML always scrolls to the document top), so on the home page
+// it glides up instead of reloading. Server-side only home can be current; the section
+// links are marked by src/scripts/section-spy.ts once it knows what's on screen.
 const links = [
-    { href: home, label: t("nav.home"), current: path === home },
-    { href: `${home}#projects`, label: t("nav.projects"), current: false },
+    { href: `${home}#top`, label: t("nav.home"), current: path === home },
     { href: `${home}#experience`, label: t("nav.experience"), current: false },
+    { href: `${home}#projects`, label: t("nav.projects"), current: false },
     { href: `${home}#contact`, label: t("nav.contact"), current: false },
 ];
 
@@ -49,7 +51,8 @@ const themeLabels = {
                             <a
                                 href={link.href}
                                 aria-current={link.current ? "page" : undefined}
-                                class="flex h-15 items-center border-b-2 border-transparent text-ink-muted no-underline transition-colors hover:text-ink aria-[current=page]:border-moss aria-[current=page]:font-semibold aria-[current=page]:text-moss"
+                                data-section-link
+                                class="flex h-15 items-center border-b-2 border-transparent text-ink-muted no-underline transition-colors hover:text-ink current:border-moss current:font-semibold current:text-moss"
                             >
                                 {link.label}
                             </a>
@@ -94,7 +97,8 @@ const themeLabels = {
                         <a
                             href={link.href}
                             aria-current={link.current ? "page" : undefined}
-                            class="flex items-baseline justify-between border-b border-rule py-4.5 text-heading no-underline aria-[current=page]:text-moss"
+                            data-section-link
+                            class="flex items-baseline justify-between border-b border-rule py-4.5 text-heading no-underline current:text-moss"
                         >
                             {link.label}
                             <span aria-hidden="true" class="text-label font-normal text-oxide">
@@ -138,8 +142,14 @@ const themeLabels = {
 
     // The sheet is a non-modal popover, so Tab would continue into the page it covers
     // (WCAG 2.4.11). Making the content behind it inert keeps focus in the header and sheet.
+    // `beforetoggle` fires synchronously (`toggle` is async), so tapping a section link
+    // un-inerts main before the fragment navigation moves focus into it.
     const main = document.getElementById("main");
-    sheet?.addEventListener("toggle", (event) => {
+    sheet?.addEventListener("beforetoggle", (event) => {
         if (main) main.inert = (event as ToggleEvent).newState === "open";
     });
+</script>
+
+<script>
+    import "../../scripts/section-spy";
 </script>

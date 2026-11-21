@@ -46,7 +46,8 @@ const pathWithoutLocale = Astro.url.pathname.replace(/^\/[^/]+\/?/, "");
 
 <script>
     // Remember an explicit language choice so the root redirect (src/pages/index.astro)
-    // prefers it over the browser's Accept-Language on later visits.
+    // prefers it over the browser's language on later visits. The href's #section is kept
+    // up to date by src/scripts/section-spy.ts.
     document.querySelectorAll<HTMLAnchorElement>("a[data-locale]").forEach((link) => {
         link.addEventListener("click", () => {
             const maxAge = 60 * 60 * 24 * 365;

@@ -38,6 +38,12 @@
 }
 
 /*
+ * Styles nav items for any aria-current value: "page" for the current page, "location"
+ * for the in-page section in view. Only "false" (or no attribute) means not current.
+ */
+@custom-variant current (&[aria-current]:not([aria-current="false"]));
+
+/*
  * Default namespaces are cleared so only the system's values generate utilities;
  * an off-palette class like `bg-red-500` simply produces no CSS.
  */
