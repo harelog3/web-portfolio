@@ -57,6 +57,14 @@ src/i18n/      translatable copy (ui.ts) and helpers
 - Use `.astro` by default; a `.tsx` Solid component only when it needs client-side interactivity (see below).
 - Style with the Sedimento tokens in `src/styles/global.css` (`bg-moss`, `text-ink-muted`, `text-display`, ...), not raw colors or sizes.
 
+## Motion
+
+- CSS only, no JS. Utilities live in `src/styles/global.css`.
+- Content visible on load (the hero): `motion-safe:animate-settle` plus `stagger-N` (80ms steps) to order blocks top to bottom. `animate-deposit` (with `origin-left`) is for strata-like bars.
+- Sections below the fold: add `reveal` to the section. It's a scroll-driven animation (`animation-timeline: view()`), already guarded by `@supports` and reduced motion; unsupported browsers just show the content.
+- Always gate animations with `motion-safe:` (or `motion-reduce:animate-none` for looping ones like the cursor).
+- Page transitions, when there's more than one page: prefer native cross-document view transitions (`@view-transition { navigation: auto; }`, zero JS) over Astro's `<ClientRouter />`.
+
 ## Interactivity
 
 - Prefer SolidJS components (islands with a `client:*` directive) when a component needs JS interactivity, instead of `<script>` tags in `.astro` files.
