@@ -4,8 +4,9 @@ import type { Locale } from "../i18n/ui";
 export const profile = {
     name: "Harel Olguín",
     stack: "typescript · go · c#",
-    // Pixel art drawn at 34×90 and exported at 8×; render it at whole multiples (3× = 102×270).
-    avatar: "/avatar_complete.png",
+    // Animated pixel art (breathing and blinking) drawn on a 34×89 grid; render it at
+    // whole multiples so every art pixel stays square (3× = 102×267).
+    avatar: "/avatar.svg",
     cv: {
         en: "/cv/harel-olguin-cv-en.pdf",
         es: "/cv/harel-olguin-cv-es.pdf",
