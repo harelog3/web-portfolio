@@ -1,0 +1,56 @@
+---
+import { stack } from "../../../data/stack";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Section from "../../layout/Section.astro";
+import SectionHeading from "../../ui/SectionHeading.astro";
+import StackRow from "./StackRow.astro";
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+const titleId = "stack-title";
+const labels = { strong: t("stack.legend.strong"), familiar: t("stack.legend.familiar") };
+
+// Literal class names so Tailwind picks them up; one step per row, top to bottom.
+const rowStagger = ["stagger-6", "stagger-7", "stagger-8", "stagger-9", "stagger-10"];
+---
+
+{/* Usually in view on load right under the hero, where a scroll-driven reveal would
+    already be finished. So it animates on load, picking up the hero's stagger right after
+    the profile card (stagger 4). */}
+<Section
+    id="stack"
+    aria-labelledby={titleId}
+    lines={1}
+    start={24}
+    class="pt-24"
+    gutterClass="stagger-5 motion-safe:animate-settle"
+>
+    <SectionHeading
+        id={titleId}
+        number="01"
+        title={t("stack.title")}
+        class="mb-8 stagger-5 motion-safe:animate-settle"
+        ruleClass="stagger-6 motion-safe:animate-deposit"
+    >
+        <Fragment slot="aside">{t("stack.note")}</Fragment>
+    </SectionHeading>
+    <dl>
+        {stack.map((group, i) => (
+            <StackRow
+                area={t(`stack.area.${group.area}`)}
+                strong={group.strong}
+                familiar={group.familiar}
+                labels={labels}
+                class:list={[rowStagger[i], "motion-safe:animate-settle"]}
+            />
+        ))}
+    </dl>
+    {/* Visual key only: screen readers already hear the tier before each list. */}
+    <p
+        aria-hidden="true"
+        class="mt-4 text-label font-normal text-ink-faint stagger-11 motion-safe:animate-settle"
+    >
+        <span class="font-semibold text-ink">{labels.strong}</span>
+        {" · "}
+        <span class="text-ink-muted">{labels.familiar}</span>
+    </p>
+</Section>

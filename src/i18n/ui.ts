@@ -41,6 +41,15 @@ const en = {
     "actions.cv": "cv.pdf",
     "actions.cvLabel": "download cv.pdf",
     "actions.projects": "see projects",
+    "stack.title": "stack",
+    "stack.note": "what I actually use",
+    "stack.area.languages": "languages",
+    "stack.area.frontend": "frontend",
+    "stack.area.backend": "backend",
+    "stack.area.data": "data",
+    "stack.area.infra": "infra",
+    "stack.legend.strong": "strong",
+    "stack.legend.familiar": "familiar",
 };
 
 export const ui = {
@@ -80,6 +89,15 @@ export const ui = {
         "actions.cv": "cv.pdf",
         "actions.cvLabel": "descargar cv.pdf",
         "actions.projects": "ver proyectos",
+        "stack.title": "stack",
+        "stack.note": "lo que uso de verdad",
+        "stack.area.languages": "lenguajes",
+        "stack.area.frontend": "frontend",
+        "stack.area.backend": "backend",
+        "stack.area.data": "datos",
+        "stack.area.infra": "infra",
+        "stack.legend.strong": "domino",
+        "stack.legend.familiar": "conozco",
     } satisfies Record<keyof typeof en, string>,
 } as const;
 

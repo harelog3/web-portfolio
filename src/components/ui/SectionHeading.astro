@@ -1,0 +1,28 @@
+---
+interface Props {
+    /** Section number shown before the title, like "01". */
+    number: string;
+    title: string;
+    /** Lets the section point `aria-labelledby` at this heading. */
+    id: string;
+    class?: string;
+    /** Extra classes for the rule, e.g. to deposit it with an entrance animation. */
+    ruleClass?: string;
+}
+
+const { number, title, id, class: className, ruleClass } = Astro.props;
+---
+
+<h2 id={id} class:list={["flex items-center gap-3 text-label", className]}>
+    <span aria-hidden="true" class="text-oxide">
+        {number} ──
+    </span>
+    <span>{title}</span>
+    <span aria-hidden="true" class:list={["h-px flex-1 origin-left bg-rule", ruleClass]}></span>
+    {/* Optional note on the right, e.g. a short subtitle or a "see all" link. */}
+    {Astro.slots.has("aside") && (
+        <span class="font-normal text-ink-faint">
+            <slot name="aside" />
+        </span>
+    )}
+</h2>
