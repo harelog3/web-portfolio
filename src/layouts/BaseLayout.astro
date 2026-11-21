@@ -2,6 +2,7 @@
 import { Font } from "astro:assets";
 import { getRelativeLocaleUrl } from "astro:i18n";
 
+import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
 import { getLocale, locales, useTranslations } from "../i18n/utils";
 
@@ -77,5 +78,6 @@ const toHref = (path: string) => (Astro.site ? new URL(path, Astro.site).href : 
         <main id="main">
             <slot />
         </main>
+        <Footer />
     </body>
 </html>

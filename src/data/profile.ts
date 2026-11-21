@@ -11,4 +11,9 @@ export const profile = {
         en: "/cv/harel-olguin-cv-en.pdf",
         es: "/cv/harel-olguin-cv-es.pdf",
     } satisfies Record<Locale, string>,
+    links: {
+        github: "https://github.com/harelog3",
+        linkedin: "https://www.linkedin.com/in/harel-alejandro-olgu%C3%ADn-gayt%C3%A1n-505b5a262/",
+        email: "harelolguin22@gmail.com",
+    },
 } as const;

@@ -1,0 +1,66 @@
+---
+import { profile } from "../../data/profile";
+import { getLocale, useTranslations } from "../../i18n/utils";
+
+const locale = getLocale(Astro.currentLocale);
+const t = useTranslations(locale);
+
+// Static output: the year is fixed at build time, which is fine as long as the site
+// gets rebuilt at least once a year.
+const year = new Date().getFullYear();
+const languageTag = { en: "en-US", es: "es-MX" }[locale];
+
+const links = [
+    { href: profile.links.github, label: "github", external: true },
+    { href: profile.links.linkedin, label: "linkedin", external: true },
+    { href: `mailto:${profile.links.email}`, label: t("footer.email"), external: false },
+];
+---
+
+{/* A vim-style status line: mode, branch, file info. Only the copyright and the links
+    carry meaning; the rest is decoration and hidden from assistive tech. */}
+<footer class="mt-24 border-t border-rule px-5 lg:px-12">
+    <div class="mx-auto flex min-h-9 max-w-content flex-wrap items-stretch text-micro">
+        <span aria-hidden="true" class="flex items-center bg-moss px-3 font-semibold text-on-moss">
+            NORMAL
+        </span>
+        <span
+            aria-hidden="true"
+            class="hidden items-center border-r border-rule px-3 text-ink-muted sm:flex"
+        >
+            ⎇ main
+        </span>
+        <p class="flex flex-1 items-center px-3 py-2 text-ink-muted">
+            © {year} {profile.name.toLowerCase()} · {t("footer.madeWith")}
+        </p>
+        {/* On mobile the bar wraps: the links drop to their own line under the copyright. */}
+        <nav
+            aria-label={t("footer.social")}
+            class="flex w-full items-center px-3 sm:w-auto sm:pr-0"
+        >
+            <ul class="flex gap-5 text-body-sm">
+                {links.map((link) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            target={link.external ? "_blank" : undefined}
+                            rel={link.external ? "noopener" : undefined}
+                            class="inline-block py-2 text-ink-muted transition-colors hover:text-ink"
+                        >
+                            {link.label}
+                            {link.external && (
+                                <>
+                                    <span aria-hidden="true"> ↗</span>
+                                    <span class="sr-only"> {t("footer.newTab")}</span>
+                                </>
+                            )}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+        <span aria-hidden="true" class="hidden items-center pl-4 text-ink-faint sm:flex">
+            utf-8 · {languageTag} · ln 214
+        </span>
+    </div>
+</footer>
