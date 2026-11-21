@@ -2,7 +2,7 @@
 import { defaultLang, languages, ui } from "../i18n/ui";
 import { locales } from "../i18n/utils";
 
-// Entry point only. The site is plain static output (no adapter, host not decided), so there
+// Entry point only. The site is plain static output (no adapter, Cloudflare serves files only), so there
 // is no server to read cookies or Accept-Language and answer with a redirect. Instead this page
 // picks the locale in the browser before first paint and replaces itself with /<locale>/.
 const defaultHref = `/${defaultLang}/`;

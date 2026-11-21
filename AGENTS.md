@@ -1,7 +1,8 @@
 ## Stack
 
 - [Astro](https://docs.astro.build) v7 (static output) + Tailwind CSS v4 via `@tailwindcss/vite`
-- Static output (`dist/`); hosting not decided yet, so keep the project adapter-free and avoid host-specific config.
+- Static output (`dist/`), hosted on Cloudflare Workers as static assets only (`wrangler.jsonc`, no Worker script). Keep the project adapter-free: every page is prerendered.
+- Deploy: `pnpm build && pnpm wrangler deploy` (Cloudflare's Git build runs the same commands).
 - Global styles / Tailwind entry: `src/styles/global.css`
 - Package manager: **pnpm** (do not use npm or yarn; keep `pnpm-lock.yaml` in sync)
 - Node `>=22.23.4`
