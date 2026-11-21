@@ -1,0 +1,59 @@
+---
+import Tag from "../../ui/Tag.astro";
+
+interface Props {
+    name: string;
+    /** Opens in a new tab. Without it the card is plain content, not a link. */
+    url?: string;
+    /** Small line above the name, like "2026 · astro · solid". */
+    meta: string;
+    description: string;
+    /** Optional tag next to the name, e.g. "in progress". */
+    tag?: string;
+    /** Shown instead of the arrow when there's nothing to link to, e.g. "private repo". */
+    note?: string;
+    newTab: string;
+    class?: string;
+}
+
+const { name, url, meta, description, tag, note, newTab, class: className } = Astro.props;
+---
+
+{/* Same stretched-link pattern as ProjectsFeatured. */}
+<article
+    class:list={[
+        "relative grid grid-cols-[minmax(0,1fr)] border border-rule-strong bg-bg-raised sm:grid-cols-[8.75rem_minmax(0,1fr)]",
+        url &&
+            "transition-[translate,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-ink hover:shadow-stamp has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-focus motion-reduce:transition-none motion-reduce:hover:translate-none",
+        className,
+    ]}
+>
+    <div class="h-32 overflow-hidden border-b border-rule-strong bg-bg-sunken bg-[repeating-linear-gradient(-45deg,var(--color-rule-strong)_0_1px,transparent_1px_9px)] sm:h-auto sm:min-h-37.5 sm:border-r sm:border-b-0">
+        <slot name="media" />
+    </div>
+    <div class="flex flex-col gap-2 px-5 py-4.5">
+        <p class="text-micro text-ink-faint">{meta}</p>
+        <h3 class="flex flex-wrap items-center gap-3 text-subheading">
+            {url ? (
+                <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener"
+                    class="no-underline after:absolute after:inset-0 focus-visible:outline-none"
+                >
+                    {name}
+                    <span aria-hidden="true" class="font-normal text-moss">
+                        {" "}
+                        ↗
+                    </span>
+                    <span class="sr-only"> {newTab}</span>
+                </a>
+            ) : (
+                <span>{name}</span>
+            )}
+            {tag && <Tag>{tag}</Tag>}
+        </h3>
+        <p class="text-body-sm text-ink-muted">{description}</p>
+        {note && <p class="mt-auto text-micro text-ink-faint">{note}</p>}
+    </div>
+</article>

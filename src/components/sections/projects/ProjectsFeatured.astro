@@ -1,0 +1,90 @@
+---
+import Highlight from "../../ui/Highlight.astro";
+import Tag from "../../ui/Tag.astro";
+
+interface Props {
+    name: string;
+    /** Opens in a new tab. Without it the card is plain content, not a link. */
+    url?: string;
+    /** Small line above the name, like "featured · 2025 · team project". */
+    meta: string;
+    description: string;
+    /** "My part" sentence, split around the words that get the highlighter. */
+    role: { before: string; highlight: string; after: string };
+    stack: string[];
+    linkLabel: string;
+    newTab: string;
+    class?: string;
+}
+
+const {
+    name,
+    url,
+    meta,
+    description,
+    role,
+    stack,
+    linkLabel,
+    newTab,
+    class: className,
+} = Astro.props;
+---
+
+{/* One link per card (the name), stretched over the whole card with ::after, so the card
+    is clickable but screen readers hear a single, named link. The ring goes on the card. */}
+<article
+    class:list={[
+        // minmax(0, …) so the diagram's min-width scrolls inside its box instead of
+        // widening the page on phones.
+        "relative grid grid-cols-[minmax(0,1fr)] border border-rule-strong bg-bg-raised lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]",
+        url &&
+            "transition-[translate,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-ink hover:shadow-stamp has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-focus motion-reduce:transition-none motion-reduce:hover:translate-none",
+        className,
+    ]}
+>
+    {/* Lifted above the stretched link so a scrollable diagram stays scrollable. */}
+    <div class="relative z-1 min-h-56 border-b border-rule-strong bg-bg-sunken bg-[repeating-linear-gradient(45deg,var(--color-rule)_0_1px,transparent_1px_7px)] p-4 lg:min-h-85 lg:border-r lg:border-b-0">
+        <slot name="media" />
+    </div>
+    <div class="flex flex-col gap-4 p-6 lg:p-8">
+        <p class="text-micro tracking-[.06em] text-ink-faint">{meta}</p>
+        <h3 class="text-heading">
+            {url ? (
+                <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener"
+                    class="no-underline after:absolute after:inset-0 focus-visible:outline-none"
+                >
+                    {name}
+                    <span aria-hidden="true" class="font-normal text-moss">
+                        {" "}
+                        ↗
+                    </span>
+                    <span class="sr-only"> {newTab}</span>
+                </a>
+            ) : (
+                name
+            )}
+        </h3>
+        <p class="text-body-sm text-ink-muted">{description}</p>
+        <p class="text-body-sm">
+            {role.before}
+            <Highlight>{role.highlight}</Highlight>
+            {role.after}
+        </p>
+        <ul role="list" class="mt-auto flex flex-wrap gap-1">
+            {stack.map((item) => (
+                <li>
+                    <Tag>{item}</Tag>
+                </li>
+            ))}
+        </ul>
+        {/* Visual cue only: the name above is the link. */}
+        {url && (
+            <p aria-hidden="true" class="text-body-sm text-moss">
+                {linkLabel} ↗
+            </p>
+        )}
+    </div>
+</article>

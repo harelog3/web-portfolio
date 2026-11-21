@@ -1,0 +1,130 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+import CodeHuntMarkDark from "../../../assets/projects/codeHunt-mark-dark.svg";
+import CodeHuntMarkLight from "../../../assets/projects/codeHunt-mark-light.svg";
+import PortfolioMark from "../../../assets/projects/portfolio-mark.svg";
+import { featured, projects, type ProjectId } from "../../../data/projects";
+import { getLocale, useTranslations } from "../../../i18n/utils";
+import Section from "../../layout/Section.astro";
+import SectionHeading from "../../ui/SectionHeading.astro";
+import ProjectsCard from "./ProjectsCard.astro";
+import ProjectsFeatured from "./ProjectsFeatured.astro";
+import ProjectsMoveDiagram from "./ProjectsMoveDiagram.astro";
+
+const t = useTranslations(getLocale(Astro.currentLocale));
+const titleId = "projects-title";
+
+const [before, after] = t("projects.move.role").split("{h}");
+const featuredMeta = [
+    t("projects.featured"),
+    featured.year,
+    featured.team && t("projects.team"),
+].filter(Boolean);
+
+// Screenshots are optional: drop `<id>-light.png` and `<id>-dark.png` into
+// src/assets/projects/ and the card picks them up; without them it keeps the hatching.
+const shots = import.meta.glob<ImageMetadata>("../../../assets/projects/*.png", {
+    eager: true,
+    import: "default",
+});
+const shot = (id: ProjectId, theme: "light" | "dark") =>
+    shots[`../../../assets/projects/${id}-${theme}.png`];
+---
+
+<Section id="projects" aria-labelledby={titleId} lines={1} start={91} class="reveal pt-24">
+    <SectionHeading id={titleId} number="03" title={t("projects.title")} class="mb-8">
+        <Fragment slot="aside">{t("projects.note")}</Fragment>
+    </SectionHeading>
+
+    <ProjectsFeatured
+        name={featured.name}
+        url={featured.url}
+        meta={featuredMeta.join(" · ")}
+        description={t("projects.move.desc")}
+        role={{ before, highlight: t("projects.move.roleHighlight"), after }}
+        stack={featured.stack}
+        linkLabel={t("projects.viewRepo")}
+        newTab={t("footer.newTab")}
+    >
+        <ProjectsMoveDiagram
+            slot="media"
+            label={t("projects.move.diagram")}
+            sub={{
+                cache: t("projects.move.diagram.cache"),
+                verify: t("projects.move.diagram.verify"),
+                files: t("projects.move.diagram.files"),
+                movies: t("projects.move.diagram.movies"),
+                email: t("projects.move.diagram.email"),
+                deploy: t("projects.move.diagram.deploy"),
+            }}
+        />
+    </ProjectsFeatured>
+
+    <ul role="list" class="mt-6 grid gap-6 lg:grid-cols-2">
+        {projects.map((project) => (
+            <li class="grid">
+                <ProjectsCard
+                    name={project.name}
+                    url={project.url}
+                    meta={[project.year, ...project.stack].join(" · ")}
+                    description={t(`projects.${project.id}.desc`)}
+                    tag={project.wip ? t("projects.wip") : undefined}
+                    note={project.url ? undefined : t("projects.private")}
+                    newTab={t("footer.newTab")}
+                >
+                    {/* Only this site has alt text written for a screenshot so far. */}
+                    {project.id === "portfolio" &&
+                        shot("portfolio", "light") &&
+                        shot("portfolio", "dark") && (
+                            <Fragment slot="media">
+                                {/* One shot per theme, swapped with the same rule as the tokens. */}
+                                <Image
+                                    src={shot(project.id, "light")}
+                                    alt={t("projects.portfolio.alt")}
+                                    width={480}
+                                    class="size-full object-cover object-left-top dark:hidden"
+                                />
+                                <Image
+                                    src={shot(project.id, "dark")}
+                                    alt={t("projects.portfolio.alt")}
+                                    width={480}
+                                    class="hidden size-full object-cover object-left-top dark:block"
+                                />
+                            </Fragment>
+                        )}
+                    {/* Until there are screenshots, the 16px pixel portrait stands in. Its
+                        cream ground is part of the art (the dark hair needs it), so it reads as a
+                        stamp with a border in both themes. 64px = 4× the grid, so it stays crisp. */}
+                    {project.id === "portfolio" &&
+                        !(shot("portfolio", "light") && shot("portfolio", "dark")) && (
+                            <div
+                                slot="media"
+                                class="flex size-full items-center justify-center bg-bg-raised"
+                            >
+                                <PortfolioMark
+                                    aria-hidden="true"
+                                    class="size-16 border border-ink"
+                                />
+                            </div>
+                        )}
+                    {/* Its own brand colors, so it sits on a plain tile instead of the
+                        hatching. Decorative: the name is right next to it. */}
+                    {project.id === "codeHunt" && (
+                        <div
+                            slot="media"
+                            class="flex size-full items-center justify-center bg-bg-raised"
+                        >
+                            <CodeHuntMarkLight aria-hidden="true" class="size-14 dark:hidden" />
+                            <CodeHuntMarkDark
+                                aria-hidden="true"
+                                class="hidden size-14 dark:block"
+                            />
+                        </div>
+                    )}
+                </ProjectsCard>
+            </li>
+        ))}
+    </ul>
+</Section>

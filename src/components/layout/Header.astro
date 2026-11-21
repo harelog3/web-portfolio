@@ -10,14 +10,13 @@ const locale = getLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 
 const home = getRelativeLocaleUrl(locale, "");
-const projects = getRelativeLocaleUrl(locale, "projects");
 const path = Astro.url.pathname.replace(/\/?$/, "/");
 
-// Section anchors (experience, contact) live on the home page and are never marked
-// current: aria-current="page" only means "this is the page you're on".
+// Section anchors (projects, experience, contact) live on the home page and are never
+// marked current: aria-current="page" only means "this is the page you're on".
 const links = [
     { href: home, label: t("nav.home"), current: path === home },
-    { href: projects, label: t("nav.projects"), current: path.startsWith(projects) },
+    { href: `${home}#projects`, label: t("nav.projects"), current: false },
     { href: `${home}#experience`, label: t("nav.experience"), current: false },
     { href: `${home}#contact`, label: t("nav.contact"), current: false },
 ];
