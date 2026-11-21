@@ -8,15 +8,24 @@ interface Row {
     status?: boolean;
 }
 
+interface Avatar {
+    src: string;
+    alt: string;
+    /** Rendered size; keep it an integer multiple of the art's pixel grid so it stays crisp. */
+    width: number;
+    height: number;
+}
+
 interface Props {
     title: string;
+    avatar?: Avatar;
     /** Decorative catalogue number, like a field-notebook sample tag. */
     number: string;
     rows: Row[];
     class?: string;
 }
 
-const { title, number, rows, class: className } = Astro.props;
+const { title, avatar, number, rows, class: className } = Astro.props;
 const titleId = "hero-card-title";
 
 // Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif.
@@ -35,20 +44,45 @@ const bands = [
             {number}
         </span>
     </div>
-    <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 px-4 pt-2 pb-3.5 text-[0.8125rem] leading-normal">
-        {rows.map((row, i) => {
-            const divider = i < rows.length - 1 ? "border-b border-dashed border-rule" : "";
-            return (
-                <>
-                    <dt class:list={["py-1.75 text-ink-faint", divider]}>{row.term}</dt>
-                    <dd class:list={["flex items-center gap-2 py-1.75", divider]}>
-                        {row.status && <StatusDot />}
-                        {row.value}
-                    </dd>
-                </>
-            );
-        })}
-    </dl>
+    {/* Container query: side by side only when the card itself is wide enough, which
+        depends on the hero grid, not on the viewport. */}
+    <div class="@container">
+        <div class="grid @sm:grid-cols-[auto_minmax(0,1fr)]">
+            {avatar && (
+                // Feet rest on the strata bands below: the person stands on their layers.
+                // In dark mode bg-sunken is as dark as the avatar's hair and clothes, so it
+                // sits on rule-strong instead, with fainter hatching to keep it quiet.
+                <div class="flex items-end justify-center border-b border-ink bg-bg-sunken bg-[repeating-linear-gradient(45deg,var(--color-rule)_0_1px,transparent_1px_7px)] px-5 pt-5 @sm:border-r @sm:border-b-0 dark:bg-rule-strong dark:bg-[repeating-linear-gradient(45deg,var(--color-ink-faint)_0_1px,transparent_1px_7px)]">
+                    <img
+                        src={avatar.src}
+                        alt={avatar.alt}
+                        width={avatar.width}
+                        height={avatar.height}
+                        decoding="async"
+                        class="block [image-rendering:pixelated]"
+                    />
+                </div>
+            )}
+            <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-5 px-4 pt-2 pb-3.5 text-[0.8125rem] leading-normal">
+                {rows.map((row, i) => {
+                    const divider = i < rows.length - 1 ? "border-b border-dashed border-rule" : "";
+                    return (
+                        <>
+                            {/* Both cells center vertically: next to the avatar the dl stretches
+                                and its rows grow, so a top-aligned dt would sit above its dd. */}
+                            <dt class:list={["flex items-center py-1.75 text-ink-faint", divider]}>
+                                {row.term}
+                            </dt>
+                            <dd class:list={["flex items-center gap-2 py-1.75", divider]}>
+                                {row.status && <StatusDot />}
+                                {row.value}
+                            </dd>
+                        </>
+                    );
+                })}
+            </dl>
+        </div>
+    </div>
     <div aria-hidden="true" class="border-t border-ink">
         {bands.map((band, i) => (
             <div class:list={[band, i > 0 && "border-t border-ink"]} />

@@ -30,6 +30,11 @@ const cardRows = [
             <p class="mt-8 max-w-[56ch] text-ink-muted">{t("hero.lede")}</p>
             <HeroActions class="mt-10" />
         </div>
-        <HeroCard title={t("hero.card.title")} number="nº 001" rows={cardRows} />
+        <HeroCard
+            title={t("hero.card.title")}
+            number="nº 001"
+            rows={cardRows}
+            avatar={{ src: profile.avatar, alt: t("hero.card.avatarAlt"), width: 102, height: 270 }}
+        />
     </div>
 </Section>
