@@ -1,8 +1,8 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 
+import { profile } from "../../data/profile";
 import { getLocale, useTranslations } from "../../i18n/utils";
-import StatusDot from "../ui/StatusDot.astro";
 import LanguagePicker from "./LanguagePicker.astro";
 import ThemeToggle from "./ThemeToggle.tsx";
 
@@ -62,10 +62,16 @@ const themeLabels = {
             </nav>
 
             <div class="hidden items-center gap-4 justify-self-end lg:flex">
-                <span class="inline-flex items-center gap-2 text-label">
-                    <StatusDot />
-                    {t("nav.available")}
-                </span>
+                <a
+                    href={profile.links.hub}
+                    target="_blank"
+                    rel="noopener"
+                    class="inline-flex min-h-6 items-center text-label text-ink-muted no-underline transition-colors hover:text-ink"
+                >
+                    {t("nav.links")}
+                    <span aria-hidden="true"> ↗</span>
+                    <span class="sr-only"> {t("footer.newTab")}</span>
+                </a>
                 <LanguagePicker />
                 <ThemeToggle client:load variant="icon" labels={themeLabels} />
             </div>
@@ -111,10 +117,16 @@ const themeLabels = {
         </nav>
 
         <div class="mt-auto flex flex-wrap items-center justify-between gap-4 text-body-sm">
-            <span class="inline-flex items-center gap-2">
-                <StatusDot />
-                {t("nav.available")}
-            </span>
+            <a
+                href={profile.links.hub}
+                target="_blank"
+                rel="noopener"
+                class="inline-block py-2 text-ink-muted no-underline transition-colors hover:text-ink"
+            >
+                {t("nav.links")}
+                <span aria-hidden="true"> ↗</span>
+                <span class="sr-only"> {t("footer.newTab")}</span>
+            </a>
             <div class="flex items-center gap-2">
                 <LanguagePicker size="lg" />
                 <ThemeToggle client:load variant="full" labels={themeLabels} />
