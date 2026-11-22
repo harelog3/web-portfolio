@@ -13,6 +13,7 @@ const cardRows = [
     { term: t("hero.card.base"), value: t("hero.card.baseValue") },
     { term: t("hero.card.stack"), value: profile.stack },
     { term: t("hero.card.now"), value: t("hero.card.nowValue") },
+    { term: t("hero.card.links"), value: new URL(profile.links.hub).host, href: profile.links.hub },
     { term: t("hero.card.status"), value: t("hero.card.statusValue"), status: true },
 ];
 ---
@@ -42,6 +43,7 @@ const cardRows = [
             title={t("hero.card.title")}
             number="nº 001"
             rows={cardRows}
+            newTabLabel={t("footer.newTab")}
             avatar={{ src: profile.avatar, alt: t("hero.card.avatarAlt"), width: 102, height: 267 }}
         />
     </div>

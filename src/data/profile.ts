@@ -15,5 +15,7 @@ export const profile = {
         github: "https://github.com/harelog3",
         linkedin: "https://www.linkedin.com/in/harel-alejandro-olgu%C3%ADn-gayt%C3%A1n-505b5a262/",
         email: "harelolguin22@gmail.com",
+        // Link-in-bio page (a separate site) that gathers every profile in one place.
+        hub: "https://links.harelolguin.dev",
     },
 } as const;

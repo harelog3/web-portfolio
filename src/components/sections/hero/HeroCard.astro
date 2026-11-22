@@ -6,6 +6,8 @@ interface Row {
     value: string;
     /** Prefixes the value with the "available" dot. */
     status?: boolean;
+    /** Turns the value into an external link that opens in a new tab. */
+    href?: string;
 }
 
 interface Avatar {
@@ -22,10 +24,12 @@ interface Props {
     /** Decorative catalogue number, like a field-notebook sample tag. */
     number: string;
     rows: Row[];
+    /** Screen-reader hint appended to linked rows, e.g. "(opens in a new tab)". */
+    newTabLabel?: string;
     class?: string;
 }
 
-const { title, avatar, number, rows, class: className } = Astro.props;
+const { title, avatar, number, rows, newTabLabel, class: className } = Astro.props;
 const titleId = "hero-card-title";
 
 // Strata from newest (top) to oldest, mirroring the Sedimento "estratos" motif. On load
@@ -76,7 +80,26 @@ const bands = [
                             </dt>
                             <dd class:list={["flex items-center gap-2 py-1.75", divider]}>
                                 {row.status && <StatusDot />}
-                                {row.value}
+                                {row.href ? (
+                                    <a
+                                        href={row.href}
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="min-w-0 text-ink underline decoration-rule-strong underline-offset-4 transition-colors hover:text-moss hover:decoration-moss"
+                                    >
+                                        {/* A host is too long for the card column: allow one break, after
+                                            the subdomain, and keep domain and arrow together. */}
+                                        {row.value.replace(/\..*/, ".")}
+                                        <wbr />
+                                        <span class="whitespace-nowrap">
+                                            {row.value.replace(/^[^.]*\./, "")}
+                                            <span aria-hidden="true"> ↗</span>
+                                        </span>
+                                        {newTabLabel && <span class="sr-only"> {newTabLabel}</span>}
+                                    </a>
+                                ) : (
+                                    row.value
+                                )}
                             </dd>
                         </>
                     );
